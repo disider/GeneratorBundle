@@ -3,8 +3,8 @@
 ## Create related entity files
   1. ~~Extract common structs and components~~
   -  From an input *entity.orm.xml*:
-    1. generate Entity.php
-    -  generate EntityForm.php
+    1. ~~generate Entity.php~~
+    -  ~~generate EntityForm.php~~
     -  generate EntityController.php
     -  generate templates twig (new, edit, index, etc)
     -  generate features
