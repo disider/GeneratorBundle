@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 
-class AppExtension extends Extension
+class DisideGeneratorExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -16,8 +16,4 @@ class AppExtension extends Extension
 //        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
     }
 
-    public function getAlias()
-    {
-        return 'app';
-    }
 }
