@@ -22,3 +22,6 @@
     -  add entity actions in menu
     -  add entity translations
     -  add configuration parameters in DependencyInjection (like page_size, etc)
+
+
+
