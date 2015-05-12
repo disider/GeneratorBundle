@@ -4,11 +4,10 @@ namespace Diside\GeneratorBundle\Command;
 
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class GenerateEntityCommand extends DoctrineCommand
 {
@@ -19,7 +18,6 @@ class GenerateEntityCommand extends DoctrineCommand
     {
         $this
             ->setName('diside:generate:entity')
-            ->setDescription('Generates entity classes and method stubs from your mapping information')
             ->addArgument('name', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');
     }
 
@@ -29,36 +27,26 @@ class GenerateEntityCommand extends DoctrineCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityName = $input->getArgument('name');
-        $output->writeln('Generating...');
-        $this->generateEntity($output, $entityName);
-        $this->generateFormType($output, $entityName);
 
+        $this->executeCommand(
+            sprintf('app/console doctrine:generate:entities %s --path=src/ --no-backup', $entityName),
+            $output);
+
+        $this->executeCommand(
+            sprintf('app/console doctrine:generate:form %s', $entityName),
+            $output);
     }
 
-    protected function generateEntity(OutputInterface $output, $entityName)
+    protected function executeCommand($command, OutputInterface $output)
     {
-        $command = $this->getApplication()->find('doctrine:generate:entities');
-        $arguments = array(
-            'command' => 'doctrine:generate:entities',
-            'name' => $entityName,
-            '--path' => 'src/',
-            '--no-backup' => true
-        );
+        $process = new Process($command);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
 
-        $params = new ArrayInput($arguments);
-        $command->run($params, $output);
-        $output->writeln('Generated entity.');
+        $output->writeln($process->getOutput());
     }
 
-    protected function generateFormType(OutputInterface $output, $entityName)
-    {
-        $command = $this->getApplication()->find('doctrine:generate:form');
-        $arguments = array(
-            'command' => 'doctrine:generate:form',
-            'entity' => $entityName
-        );
 
-        $command->run(new ArrayInput($arguments), $output);
-        $output->writeln('Generated form.');
-    }
 }
