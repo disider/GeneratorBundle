@@ -1,0 +1,85 @@
+<?php
+
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Diside\GeneratorBundle\Form\Processor\DefaultFormProcessor;
+use {{ namespace }}\Entity\{{ entity }};
+{% endblock use_statements %}
+
+/**
+ * @Route("/{{ path|pluralize }}")
+ */
+{% block class_definition %}
+class {{ entity }}Controller extends BaseController
+{% endblock class_definition %}
+{
+{% block class_body %}
+
+    /**
+     * @Route(name="{{ route_prefix|pluralize }}")
+     * @Template
+     */
+    public function indexAction()
+    {
+        return array(
+            '{{ entity[:1]|lower ~ entity[1:]|pluralize }}' => $this->get{{ entity }}Repository()->findAll()
+        );
+    }
+
+    /**
+    * @Route("/new", name="{{ route_prefix }}_new")
+    * @Template
+    */
+    public function newAction(Request $request)
+    {
+        return $this->processForm($request, new {{ entity }}());
+    }
+
+    /**
+    * @Route("/{id}/edit", name="{{ route_prefix }}_edit")
+    * @Template
+    */
+    public function editAction(Request $request, {{ entity }} $entity)
+    {
+         return $this->processForm($request, $entity);
+    }
+
+    /**
+    * @Route("/{id}/delete", name="{{ route_prefix }}_delete")
+    */
+    public function deleteAction({{ entity }} $behaviorRule)
+    {
+        $this->get{{ entity }}Repository()->delete($behaviorRule);
+
+        return $this->redirectToRoute('{{ route_prefix }}');
+    }
+
+    protected function processForm(Request $request, {{ entity }} $entity = null)
+    {
+        $processor = $this->get('{{ route_prefix|pluralize }}_form_processor');
+
+        $processor->process($request, $entity);
+
+        if ($processor->isValid()) {
+            $this->addFlash('success', $processor->isNew() ? 'flash.{{ route_prefix }}.created' : 'flash.{{ route_prefix }}.updated',
+            array('%{{ route_prefix }}%' => $processor->getData()));
+
+            if($processor->isRedirectingTo(DefaultFormProcessor::REDIRECT_TO_LIST))
+                return $this->redirectToRoute('{{ route_prefix|pluralize }}');
+
+            return $this->redirectToRoute('{{ route_prefix }}_edit', array('id' => $processor->getData()->getId()));
+        }
+
+        $form = $processor->getForm();
+
+        return array(
+            'form' => $form->createView()
+        );
+    }
+
+{% endblock class_body %}
+}

@@ -5,7 +5,7 @@
   -  From an input *entity.orm.xml*:
     1. ~~generate Entity.php~~
     -  ~~generate EntityForm.php~~
-    -  generate EntityController.php
+    -  ~~generate EntityController.php~~
     -  generate templates twig (new, edit, index, etc)
     -  generate features
     -  generate feature contexts
