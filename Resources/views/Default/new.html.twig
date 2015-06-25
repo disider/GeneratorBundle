@@ -1,0 +1,7 @@
+{% extends '::two-columns.html.twig' %}
+
+{% block main_content %}
+    <h2>{{ 'road_trait.title.create'|trans }}</h2>
+    {% include 'AppBundle:RoadTrait:_form.html.twig' with {'route': path('road_trait_new')} %}
+{% endblock %}
+

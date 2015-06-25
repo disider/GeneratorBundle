@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class GenerateEntityCommand extends DoctrineCommand
+class GenerateCRUDCommand extends DoctrineCommand
 {
     /**
      * {@inheritDoc}
@@ -17,7 +17,7 @@ class GenerateEntityCommand extends DoctrineCommand
     protected function configure()
     {
         $this
-            ->setName('diside:generate:entity')
+            ->setName('diside:generate:crud')
             ->addArgument('name', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');
     }
 
@@ -34,6 +34,14 @@ class GenerateEntityCommand extends DoctrineCommand
 
         $this->executeCommand(
             sprintf('app/console doctrine:generate:form %s', $entityName),
+            $output);
+
+        $this->executeCommand(
+            sprintf('app/console diside:generate:controller %s', $entityName),
+            $output);
+
+        $this->executeCommand(
+            sprintf('app/console diside:generate:views %s', $entityName),
             $output);
     }
 

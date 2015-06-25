@@ -3,14 +3,14 @@
 namespace Diside\GeneratorBundle\Command;
 
 
-use Diside\GeneratorBundle\Generator\ControllerGenerator;
+use Diside\GeneratorBundle\Generator\ViewsGenerator;
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateControllerCommand extends GenerateDoctrineCommand
+class GenerateViewsCommand extends GenerateDoctrineCommand
 {
     /**
      * {@inheritDoc}
@@ -18,7 +18,7 @@ class GenerateControllerCommand extends GenerateDoctrineCommand
     protected function configure()
     {
         $this
-            ->setName('diside:generate:controller')
+            ->setName('diside:generate:views')
             ->addArgument('entity', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');
     }
 
@@ -30,24 +30,18 @@ class GenerateControllerCommand extends GenerateDoctrineCommand
         $entity = Validators::validateEntityName($input->getArgument('entity'));
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
-        $bundle = $this->getApplication()->getKernel()->getBundle($bundle);
-        /** @var ControllerGenerator $generator */
+        $bundle  = $this->getApplication()->getKernel()->getBundle($bundle);
+        /** @var ViewsGenerator $generator */
         $generator = $this->getControllerGenerator($bundle);
 
-        $outputMessage = $generator->generate($bundle, $entity);
+        $generator->generate($bundle, $entity);
 
-        $output->writeln(array(
-            'The new controller file has been created.',
-            '',
-            'Add this in doctrine.xml',
-            '',
-            $outputMessage,
-            ));
+        $output->writeln('The new views file has been created.');
     }
 
     protected function createGenerator()
     {
-        return new ControllerGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
+        return new ViewsGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
     }
 
 }
