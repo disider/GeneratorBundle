@@ -1,0 +1,16 @@
+{% autoescape false %}
+{% block extends %}
+    {{ "{% extends '::base.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+
+{{ "{% block body %}" }}
+    <h2> {{ "{{ '" ~ message_prefix ~ ".title.create'|trans }}" }}</h2>
+
+    {{ "{% include 'DisideGeneratorBundle:Default:_form.html.twig' with {'path': path('" ~ route_prefix ~ "_new')} %}" }}
+
+{{ "{% endblock body %}" }}
+
+{% endblock body %}
+{% endautoescape %}

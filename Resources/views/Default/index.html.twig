@@ -9,15 +9,14 @@
     <table class="table table-striped">
         <tr>
             {% block main_content %}
-                <th class="col-sm-8">{{ 'fields.name'|trans }}</th>
+                <th class="col-sm-8">{{ 'fields.id'|trans }}</th>
                 <th class="col-sm-2 text-center">{{ 'actions.title'|trans }}</th>
             {% endblock main_content %}
         </tr>
 
         {% for entity in entities %}
             <tr class="{{ route_prefix|replace('_', '-') }}">
-                <td class="name">{{ entity.name }}</td>
-                <td class="devices text-center">{{ roadTrait.devices|length }}</td>
+                <td class="name">{{ entity.id }}</td>
                 <td class="text-center">
                     <a class="btn btn-sm btn-default" href="{{ path(route_prefix ~ '_edit', {'id':entity.id }) }}">{{ icon('pencil') }}</a>
                     <a class="btn btn-sm btn-danger" href="{{ path(route_prefix ~ '_delete', {'id':entity.id }) }}">{{ icon('trash') }}</a>

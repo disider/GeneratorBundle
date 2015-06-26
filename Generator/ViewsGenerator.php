@@ -28,6 +28,19 @@ class ViewsGenerator extends BaseGenerator
             'message_prefix' => $this->getRoutePrefix($entity),
             'entity' => $entity,
         ));
+
+        $indexPath = $this->basePath . '/new.html.twig';
+        $this->renderFile('DisideGeneratorBundle:Views:new.html.twig.twig', $indexPath, array(
+            'route_prefix' => $this->getRoutePrefix($entity),
+            'message_prefix' => $this->getRoutePrefix($entity)
+        ));
+
+        $indexPath = $this->basePath . '/edit.html.twig';
+        $this->renderFile('DisideGeneratorBundle:Views:edit.html.twig.twig', $indexPath, array(
+            'route_prefix' => $this->getRoutePrefix($entity),
+            'message_prefix' => $this->getRoutePrefix($entity)
+        ));
+
     }
 
 

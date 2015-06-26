@@ -40,7 +40,7 @@ class ControllerGenerator extends BaseGenerator
             'route_prefix' => $this->getRoutePrefix($entity),
         ));
 
-        return $this->render('DisideGeneratorBundle:Service:repository.html.twig', array(
+        return $this->render('DisideGeneratorBundle:Service:services.html.twig', array(
             'namespace' => $bundle->getNamespace(),
             'entity' => $entity,
         ));

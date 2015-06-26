@@ -10,7 +10,7 @@
     {{ "{% include 'DisideGeneratorBundle:Default:index.html.twig' with {
         'route_prefix': '" ~ route_prefix ~ "',
         'message_prefix': '" ~ message_prefix ~ "',
-        'entities' : '" ~ entity[:1]|lower ~ entity[1:]|pluralize  ~ "'
+        'entities' : " ~ entity[:1]|lower ~ entity[1:]|pluralize  ~ "
         } %}" }}
 
 {{ "{% endblock body %}" }}

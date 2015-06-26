@@ -5,12 +5,18 @@
 
     <parameters>
         <parameter key="twig.inflect_extension.class">Diside\GeneratorBundle\Twig\InflectExtension</parameter>
+        <parameter key="twig.global_extension.class">Diside\GeneratorBundle\Twig\GlobalExtension</parameter>
     </parameters>
 
     <services>
 
         <service id="twig.inflect_extension" class="%twig.inflect_extension.class%">
             <tag name="twig.extension"/>
+        </service>
+
+        <service id="global.twig_extension" class="%twig.global_extension.class%">
+            <argument>%kernel.debug%</argument>
+            <tag name="twig.extension" />
         </service>
 
     </services>

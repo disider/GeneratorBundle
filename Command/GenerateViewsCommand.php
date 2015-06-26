@@ -32,7 +32,7 @@ class GenerateViewsCommand extends GenerateDoctrineCommand
 
         $bundle  = $this->getApplication()->getKernel()->getBundle($bundle);
         /** @var ViewsGenerator $generator */
-        $generator = $this->getControllerGenerator($bundle);
+        $generator = $this->getGenerator($bundle);
 
         $generator->generate($bundle, $entity);
 

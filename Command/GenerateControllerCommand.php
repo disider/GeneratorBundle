@@ -32,14 +32,14 @@ class GenerateControllerCommand extends GenerateDoctrineCommand
 
         $bundle = $this->getApplication()->getKernel()->getBundle($bundle);
         /** @var ControllerGenerator $generator */
-        $generator = $this->getControllerGenerator($bundle);
+        $generator = $this->getGenerator($bundle);
 
         $outputMessage = $generator->generate($bundle, $entity);
 
         $output->writeln(array(
             'The new controller file has been created.',
             '',
-            'Add this in doctrine.xml',
+            'Add this services:',
             '',
             $outputMessage,
             ));

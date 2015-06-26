@@ -27,7 +27,7 @@ class {{ entity }}Controller extends BaseController
     public function indexAction()
     {
         return array(
-            '{{ entity[:1]|lower ~ entity[1:]|pluralize }}' => $this->get{{ entity }}Repository()->findAll()
+            '{{ entity[:1]|lower ~ entity[1:]|pluralize }}' => $this->get('{{ entity|lower }}_repository')->findAll()
         );
     }
 
@@ -54,14 +54,14 @@ class {{ entity }}Controller extends BaseController
     */
     public function deleteAction({{ entity }} $behaviorRule)
     {
-        $this->get{{ entity }}Repository()->delete($behaviorRule);
+        $this->get('{{ entity|lower }}_repository')->delete($behaviorRule);
 
-        return $this->redirectToRoute('{{ route_prefix }}');
+        return $this->redirectToRoute('{{ route_prefix|pluralize }}');
     }
 
     protected function processForm(Request $request, {{ entity }} $entity = null)
     {
-        $processor = $this->get('{{ route_prefix|pluralize }}_form_processor');
+        $processor = $this->get('{{ route_prefix }}_form_processor');
 
         $processor->process($request, $entity);
 

@@ -1,31 +1,7 @@
-{% import 'AppBundle:Default:_macros.html.twig' as macro %}
-
-<form method="POST" action="{{ route }}" role="form" {{ novalidate }}>
+<form method="POST" action="{{ path }}" role="form" {{ novalidate }}>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                {{ macro.form_field(form.name, 4) }}
-                {{ macro.form_field(form.devices, 4) }}
-            </div>
-
-            <div class="row">
-                {{ macro.form_field(form.roadType, 4) }}
-                {{ macro.form_field(form.lowTrafficIndex, 2) }}
-                {{ macro.form_field(form.highTrafficIndex, 2) }}
-            </div>
-
-            <div class="row">
-                {{ macro.form_field(form.description, 8) }}
-            </div>
-        </div>
-
-        <div class="panel-footer">
-            <div class="actions text-right">
-                {{ form_widget(form.save) }}
-                {{ form_widget(form.saveAndClose) }}
-            </div>
-
-
+            {{ form(form) }}
             {{ form_rest(form) }}
         </div>
     </div>
