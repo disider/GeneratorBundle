@@ -55,6 +55,7 @@ class {{ entity }}Controller extends BaseController
     public function deleteAction({{ entity }} $behaviorRule)
     {
         $this->get('{{ entity|lower }}_repository')->delete($behaviorRule);
+        $this->addFlash('success', '{{ route_prefix }}.flash.deleted');
 
         return $this->redirectToRoute('{{ route_prefix|pluralize }}');
     }
@@ -66,8 +67,7 @@ class {{ entity }}Controller extends BaseController
         $processor->process($request, $entity);
 
         if ($processor->isValid()) {
-            $this->addFlash('success', $processor->isNew() ? 'flash.{{ route_prefix }}.created' : 'flash.{{ route_prefix }}.updated',
-            array('%{{ route_prefix }}%' => $processor->getData()));
+            $this->addFlash('success', $processor->isNew() ? '{{ route_prefix }}.flash.created' : '{{ route_prefix }}.flash.updated');
 
             if($processor->isRedirectingTo(DefaultFormProcessor::REDIRECT_TO_LIST))
                 return $this->redirectToRoute('{{ route_prefix|pluralize }}');

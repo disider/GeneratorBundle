@@ -1,16 +1,23 @@
 {% autoescape false %}
 {% block extends %}
-    {{ "{% extends '::base.html.twig' %}" }}
+{{ "{% extends 'DisideGeneratorBundle::two-columns.html.twig' %}" }}
 {% endblock extends %}
 
 {% block body %}
 
-{{ "{% block body %}" }}
+{{ "{% block main_content %}" }}
     <h2> {{ "{{ '" ~ message_prefix ~ ".title.edit'|trans }}" }}</h2>
 
-    {{ "{% include 'DisideGeneratorBundle:Default:_form.html.twig' with {'path': path('" ~ route_prefix ~ "_edit', {'id': form.vars.data.id})} %}" }}
+    <form method="POST" action="{{ "{{ path('" ~ route_prefix ~ "_edit', {'id': form.vars.data.id}) }}" }}" role="form" {{ "{{ novalidate }}" }}>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ "{{ form(form) }}" }}
+                {{ "{{ form_rest(form) }}" }}
+            </div>
+        </div>
+    </form>
 
-{{ "{% endblock body %}" }}
+    {{ "{% endblock main_content %}" }}
 
 {% endblock body %}
 {% endautoescape %}

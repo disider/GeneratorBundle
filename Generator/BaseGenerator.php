@@ -3,6 +3,7 @@
 namespace Diside\GeneratorBundle\Generator;
 
 use Diside\GeneratorBundle\Helper\Inflect;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Filesystem\Filesystem;
@@ -20,7 +21,7 @@ abstract class BaseGenerator extends Generator
     }
 
 
-    abstract public function generate(BundleInterface $bundle, $entity);
+    abstract public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata);
 
 
     protected function getTwigEnvironment()
@@ -38,6 +39,24 @@ abstract class BaseGenerator extends Generator
     protected function getRoutePrefix($entity)
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $entity));
+    }
+
+    protected function getFieldsFromMetadata(ClassMetadataInfo $metadata)
+    {
+        $fields = (array) $metadata->fieldNames;
+
+        // Remove the primary key field if it's not managed manually
+        if (!$metadata->isIdentifierNatural()) {
+            $fields = array_diff($fields, $metadata->identifier);
+        }
+
+        foreach ($metadata->associationMappings as $fieldName => $relation) {
+            if ($relation['type'] !== ClassMetadataInfo::ONE_TO_MANY) {
+                $fields[] = $fieldName;
+            }
+        }
+
+        return $fields;
     }
 
 }

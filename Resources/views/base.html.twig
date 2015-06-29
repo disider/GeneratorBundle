@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>{% block title %}The project title{% endblock %}</title>
+    <title>{{ 'app.title'|trans }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
 
@@ -25,7 +25,7 @@
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-brand">
-                <a href="{{ path('homepage') }}">{% block logo %}The project title{% endblock %}</a>
+                <a href="{{ path('homepage') }}">{{ 'app.title'|trans }}</a>
             </div>
         </div>
     </nav>

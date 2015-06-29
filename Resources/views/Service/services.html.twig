@@ -22,7 +22,7 @@
         <argument type="service" id="{{ entity|lower }}_repository"/>
         <argument type="service" id="form.factory"/>
         <argument type="service" id="security.context"/>
-        <argument>{{ namespace }}\Form\{{ entity }}Type</argument>
+        <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
     </service>
 
 {% endblock service %}

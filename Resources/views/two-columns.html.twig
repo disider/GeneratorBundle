@@ -1,0 +1,18 @@
+{% extends 'DisideGeneratorBundle::base.html.twig' %}
+
+
+{% block body %}
+    <aside id="left-menu-content" class="col-md-2 hidden-xs">
+        {% block left_column %}
+
+        {% endblock left_column %}
+    </aside>
+
+    <section id="main-content" class="col-md-10">
+        {% include 'BraincraftedBootstrapBundle::flash.html.twig' with { 'close': true } %}
+
+        {% block main_content %}
+
+        {% endblock main_content %}
+    </section>
+{% endblock body %}

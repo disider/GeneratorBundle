@@ -1,3 +1,6 @@
+app:
+  title: Projects title
+
 actions:
   create: Create
   save: Save

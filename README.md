@@ -6,7 +6,7 @@
     1. ~~generate Entity.php~~
     -  ~~generate EntityForm.php~~
     -  ~~generate EntityController.php~~
-    -  generate templates twig (new, edit, index, etc)
+    -  ~~generate templates twig (new, edit, index, etc)~~
     -  generate features
     -  generate feature contexts
     -  generate fixtures

@@ -1,19 +1,45 @@
 {% autoescape false %}
 {% block extends %}
-    {{ "{% extends '::base.html.twig' %}" }}
+    {{ "{% extends 'DisideGeneratorBundle::two-columns.html.twig' %}" }}
 {% endblock extends %}
 
 {% block body %}
+{{ "{% block main_content %}" }}
 
-{{ "{% block body %}" }}
+    <h2>
+        {{ "{{ ('" ~ message_prefix ~ ".title.list')|trans }} " }}
 
-    {{ "{% include 'DisideGeneratorBundle:Default:index.html.twig' with {
-        'route_prefix': '" ~ route_prefix ~ "',
-        'message_prefix': '" ~ message_prefix ~ "',
-        'entities' : " ~ entity[:1]|lower ~ entity[1:]|pluralize  ~ "
-        } %}" }}
+        <a href="{{ "{{ path('" ~ route_prefix ~ "_new') }}" }}"
+           class="pull-right btn btn-sm btn-primary">{{ "{{ icon('plus') }} {{ 'actions.create'|trans }}" }}</a>
+    </h2>
 
-{{ "{% endblock body %}" }}
+    <div class="panel panel-default">
+        <table class="table table-striped">
+            <tr>
+                {%- for field in fields %}
+                <th class="col-sm-8">{{ "{{ 'fields." ~ field ~ "'|trans }}" }}</th>
+                {%- endfor %}
+                <th class="col-sm-2 text-center">{{ "{{ 'actions.title'|trans }}" }}</th>
+            </tr>
+
+        {{ " {% for entity in " ~ entity[:1]|lower ~ entity[1:]|pluralize  ~ " %}" }}
+            <tr class="{{ " ~ route_prefix ~ "|replace('_', '-') }}">
+                {%- for field in fields %}
+                <td>{{ "{{ entity." ~ field ~ " }}" }}</td>
+                {%- endfor %}
+                <td class="text-center">
+                    <a class="btn btn-sm btn-default"
+                       href="{{ "{{ path('"~route_prefix ~ "_edit', {'id': entity.id }) }}" }}">{{ "{{ icon('pencil') }}" }}</a>
+                    <a class="btn btn-sm btn-danger"
+                       href="{{ "{{ path('"~route_prefix ~ "_delete', {'id': entity.id }) }}" }}">{{ "{{ icon('trash') }}" }}</a>
+                </td>
+            </tr>
+        {{ "{% endfor %}" }}
+        </table>
+
+    </div>
+
+{{ "{% endblock main_content %}" }}
 
 {% endblock body %}
 {% endautoescape %}

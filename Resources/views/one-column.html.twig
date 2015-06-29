@@ -1,0 +1,10 @@
+{% extends 'DisideGeneratorBundle::base.html.twig' %}
+
+
+{% block body %}
+    {% include 'BraincraftedBootstrapBundle::flash.html.twig' with { 'close': true } %}
+
+    {% block main_content %}
+
+    {% endblock main_content %}
+{% endblock body %}

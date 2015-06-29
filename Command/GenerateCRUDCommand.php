@@ -33,7 +33,7 @@ class GenerateCRUDCommand extends DoctrineCommand
             $output);
 
         $this->executeCommand(
-            sprintf('app/console doctrine:generate:form %s', $entityName),
+            sprintf('app/console diside:generate:form %s', $entityName),
             $output);
 
         $this->executeCommand(
