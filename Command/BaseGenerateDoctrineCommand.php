@@ -10,9 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
 {
 
-    /**
-     * @see Command
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entity = Validators::validateEntityName($input->getArgument('entity'));

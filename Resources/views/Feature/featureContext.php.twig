@@ -1,0 +1,24 @@
+<?php
+
+namespace {{ namespace }}\Features\Context;
+
+use Diside\BehatExtension\Context\AbstractContext;
+
+class FeatureContext extends AbstractContext
+{
+    use EntityLookupContextTrait;
+
+    public function __construct(array $parameters)
+    {
+        parent::__construct($parameters);
+
+        //$this->useContext('x_context', new XContext());
+    }
+
+    /**
+    * @BeforeScenario
+    */
+    public function mockServices()
+    {
+    }
+}

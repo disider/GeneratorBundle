@@ -24,7 +24,7 @@ class ViewsGenerator extends BaseGenerator
         $this->basePath = $bundle->getPath() . '/Resources/views/' . $entity;
         $indexPath = $this->basePath . '/index.html.twig';
 
-        $this->renderFile('DisideGeneratorBundle:Views:index.html.twig.twig', $indexPath, array(
+        $this->renderFile('DisideGeneratorBundle:View:index.html.twig.twig', $indexPath, array(
             'fields' => $this->getFieldsFromMetadata($metadata),
             'route_prefix' => $this->getRoutePrefix($entity),
             'message_prefix' => $this->getRoutePrefix($entity),
@@ -32,13 +32,13 @@ class ViewsGenerator extends BaseGenerator
         ));
 
         $indexPath = $this->basePath . '/new.html.twig';
-        $this->renderFile('DisideGeneratorBundle:Views:new.html.twig.twig', $indexPath, array(
+        $this->renderFile('DisideGeneratorBundle:View:new.html.twig.twig', $indexPath, array(
             'route_prefix' => $this->getRoutePrefix($entity),
             'message_prefix' => $this->getRoutePrefix($entity)
         ));
 
         $indexPath = $this->basePath . '/edit.html.twig';
-        $this->renderFile('DisideGeneratorBundle:Views:edit.html.twig.twig', $indexPath, array(
+        $this->renderFile('DisideGeneratorBundle:View:edit.html.twig.twig', $indexPath, array(
             'route_prefix' => $this->getRoutePrefix($entity),
             'message_prefix' => $this->getRoutePrefix($entity)
         ));

@@ -11,7 +11,7 @@
     -  generate feature contexts
     -  generate fixtures
     -  add entity form processor to services
-    -  add entity repositoty to services
+    -  add entity repository to services
     -  add entity actions in menu
     -  add entity translations
     -  add configuration parameters in DependencyInjection (like page_size, etc)

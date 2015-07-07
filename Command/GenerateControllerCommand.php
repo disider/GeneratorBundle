@@ -9,9 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateControllerCommand extends BaseGenerateDoctrineCommand
 {
-    /**
-     * {@inheritDoc}
-     */
+
     protected function configure()
     {
         $this
