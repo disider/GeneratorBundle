@@ -48,6 +48,7 @@
         "lexik/form-filter-bundle": "3.*@dev"
       },
     "require-dev": {
+      "sensio/generator-bundle": "~2.3",
       "phpunit/phpunit": "4.4.*@stable",
       "behat/behat": "2.5.*@stable",
       "behat/symfony2-extension": "*",

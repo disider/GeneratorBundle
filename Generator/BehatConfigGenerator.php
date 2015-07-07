@@ -3,7 +3,6 @@
 namespace Diside\GeneratorBundle\Generator;
 
 use Diside\GeneratorBundle\Helper\Inflect;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Filesystem\Filesystem;
@@ -32,21 +31,32 @@ class BehatConfigGenerator extends Generator
         return Inflect::pluralize($path);
     }
 
-    public function generate(BundleInterface $bundle)
+    public function generate(BundleInterface $bundle, $serverName)
     {
-        $this->basePath = $bundle->getPath();
+        $this->generateFile($bundle, 'FeatureContext.php');
+        $this->generateFile($bundle, 'EntityLookupContextTrait.php');
 
-        $featureContextPath = $bundle->getPath() . '/Features/Context/FeatureContext.php';
+        $behatConfigPath = $bundle->getPath() . '/../../behat.yml';
+        $this->renderFile('DisideGeneratorBundle:Feature:behat.yml.twig', $behatConfigPath, array(
+            'serverName' => $serverName
+        ));
+
+        return $this->render('DisideGeneratorBundle:Feature:install.html.twig', array());
+    }
+
+    protected function generateFile(BundleInterface $bundle, $fileName)
+    {
+        $featureContextPath = $bundle->getPath() . '/Features/Context/' . $fileName;
 
         if (file_exists($featureContextPath)) {
             throw new \RuntimeException(sprintf('Unable to generate the %s class, it already exists', $featureContextPath));
         }
 
-        $this->renderFile('DisideGeneratorBundle:Feature:featureContext.php.twig', $featureContextPath, array(
+        $this->renderFile('DisideGeneratorBundle:Feature:' . lcfirst($fileName) . '.twig', $featureContextPath, array(
             'namespace' => $bundle->getNamespace()
         ));
-
     }
+
 
 
 }

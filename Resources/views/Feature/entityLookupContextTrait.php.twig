@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }}\Features\Context;
+
+use Diside\BehatExtension\Helper\EntityLookup;
+
+trait EntityLookupContextTrait
+{
+
+    protected function getEntityLookupTables()
+    {
+        return array(
+//            'entity' => new EntityLookup($this->get('entity_repository'), 'property')
+        );
+    }
+
+}

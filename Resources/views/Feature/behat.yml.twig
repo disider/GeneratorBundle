@@ -1,0 +1,23 @@
+default:
+    context:
+        parameters:
+            debug: true
+            base_url: 'http://{{ serverName }}/app_test.php'
+    formatter:
+        name: pretty
+        parameters:
+            output_styles:
+                comment: [ white, black ]
+    extensions:
+        Behat\Symfony2Extension\Extension:
+            mink_driver: true
+            kernel:
+                env: test
+                debug: true
+        Behat\MinkExtension\Extension:
+            base_url: 'http://{{ serverName }}/app_test.php'
+            default_session: 'symfony2'
+            javascript_session: 'selenium2'
+            selenium2: ~
+
+        PSS\Behat\Symfony2MockerExtension\Extension: ~

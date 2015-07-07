@@ -15,17 +15,19 @@ class InitBehatCommand extends GeneratorCommand
     {
         $this
             ->setName('diside:behat:init')
-            ->addArgument('bundle', InputArgument::REQUIRED, 'A bundle name');
+            ->addArgument('bundle', InputArgument::REQUIRED, 'Bundle name')
+            ->addArgument('serverName', InputArgument::REQUIRED, 'Server name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $bundle = $input->getArgument('bundle');
+        $serverName = $input->getArgument('serverName');
 
         $bundle = $this->getApplication()->getKernel()->getBundle($bundle);
         $generator = $this->getGenerator($bundle);
 
-        $outputMessage = $generator->generate($bundle);
+        $outputMessage = $generator->generate($bundle, $serverName);
 
         $this->writeOutput($output, $outputMessage);
     }
@@ -37,7 +39,14 @@ class InitBehatCommand extends GeneratorCommand
 
     protected function writeOutput(OutputInterface $output, $outputMessage)
     {
-        $output->writeln(array('Behat has been initialized.'));
+        $output->writeln(array(
+            '',
+            'Behat has been initialized.',
+            '',
+            'Add these lines to your composer',
+            '',
+            $outputMessage
+        ));
     }
 
 }
