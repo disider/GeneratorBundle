@@ -18,6 +18,10 @@ class FeaturesGenerator extends BaseGenerator
         $parts = explode('\\', $entity);
         array_pop($parts);
 
+        if (file_exists($classPath)) {
+            throw new \RuntimeException(sprintf('Unable to generate the %s class, it already exists', $classPath));
+        }
+
         $this->renderFile('DisideGeneratorBundle:Feature:EntityContext.php.twig', $classPath, array(
             'fields' => $this->getFieldsWithType($metadata),
             'namespace' => $bundle->getNamespace(),

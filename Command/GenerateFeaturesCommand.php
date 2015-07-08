@@ -11,7 +11,7 @@ class GenerateFeaturesCommand extends BaseGenerateDoctrineCommand
     protected function configure()
     {
         $this
-            ->setName('diside:generate:features')
+            ->setName('diside:behat:features-generator')
             ->addArgument('entity', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');;
     }
 
