@@ -1,4 +1,4 @@
-{% block service %}
+{% block config %}
 -> ORM:
 
     repository-class="Diside\GeneratorBundle\Entity\Repository\DefaultRepository"
@@ -8,7 +8,7 @@
 
     <parameter key="default_repository.class">Diside\GeneratorBundle\Entity\Repository\DefaultRepository</parameter>
 
-    <service id="{{ entity|lower }}_repository" class="%default_repository.class%"
+    <service id="{{ route_prefix|lower }}_repository" class="%default_repository.class%"
              factory-service="doctrine.orm.default_entity_manager" factory-method="getRepository">
         <argument>{{ namespace }}:{{ entity }}</argument>
     </service>
@@ -19,10 +19,10 @@
     <parameter key="default_form_processor.class">Diside\GeneratorBundle\Form\Processor\DefaultFormProcessor</parameter>
 
     <service id="{{ entity|lower }}_form_processor" class="%default_form_processor.class%">
-        <argument type="service" id="{{ entity|lower }}_repository"/>
+        <argument type="service" id="{{ route_prefix|lower }}_repository"/>
         <argument type="service" id="form.factory"/>
         <argument type="service" id="security.context"/>
         <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
     </service>
 
-{% endblock service %}
+{% endblock config %}

@@ -43,7 +43,7 @@ class InitBehatCommand extends GeneratorCommand
             '',
             'Behat has been initialized.',
             '',
-            'Add these lines to your composer',
+            'Add these lines:',
             '',
             $outputMessage
         ));

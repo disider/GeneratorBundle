@@ -23,10 +23,10 @@ class {{ form_class }} extends AbstractType
         $builder
         {%- for field in fields %}
 
-            ->add('{{ field }}')
+            ->add('{{ field }}', null, array('label' => 'fields.{{ field }}'))
         {%- endfor %}
 
-            ->add('submit', 'submit')
+            ->add('submit', 'submit', array('label' => 'actions.save'))
         ;
     }
     {% endif %}

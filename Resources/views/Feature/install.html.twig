@@ -1,9 +1,7 @@
-{% block composer %}
+{% block config %}
 -> Composer:
 
     "require-dev": {
-        "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit": "4.4.*@stable",
         "behat/behat": "2.5.*@stable",
         "behat/symfony2-extension": "*",
         "behat/mink": "*",
@@ -13,5 +11,15 @@
         "polishsymfonycommunity/symfony2-mocker-extension": "*",
         "diside/behat-extension": "dev-master"
     }
+-> AppKernel:
 
-{% endblock composer %}
+    protected function getContainerBaseClass()
+    {
+        if (in_array($this->environment, array('test', 'dev'))) {
+            return '\PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer';
+        }
+
+        return parent::getContainerBaseClass();
+    }
+
+{% endblock config %}

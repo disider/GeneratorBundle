@@ -26,6 +26,6 @@ class GenerateViewsCommand extends BaseGenerateDoctrineCommand
 
     protected function writeOutput(OutputInterface $output, $outputMessage)
     {
-        $output->writeln('The new views file has been created.');
+        $output->writeln('New view files have been created.');
     }
 }

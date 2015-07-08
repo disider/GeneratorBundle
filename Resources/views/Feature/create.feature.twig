@@ -1,0 +1,12 @@
+{% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+
+Feature: User creates a {{ entity_name }}
+
+  Scenario: I create a {{ entity_name }}
+    Given I visit "/{{ entity_path }}/new"
+    When I fill the "{{ entity_path|singularize }}" fields with:
+{% for field in fields %}
+      {{ ' | ' ~ field.name  ~ ' | '  ~ field.value  ~ ' | ' }}
+{% endfor %}
+    And I press "Save"
+    Then I should be on "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"

@@ -1,0 +1,8 @@
+{% block config %}
+-> FeatureContext:
+    $this->useContext('{{ route_prefix }}_context', new {{ entity }}Context());
+
+-> EntityLookupContextTrait:
+    '{{ (entity[:1]|lower ~ entity[1:])|pluralize }}' => new EntityLookup($this->get('{{ route_prefix }}_repository'), 'id'),
+
+{% endblock config %}

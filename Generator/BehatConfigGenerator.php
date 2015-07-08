@@ -35,6 +35,7 @@ class BehatConfigGenerator extends Generator
     {
         $this->generateFile($bundle, 'FeatureContext.php');
         $this->generateFile($bundle, 'EntityLookupContextTrait.php');
+        $this->generateFile($bundle, 'BaseSubContext.php');
 
         $behatConfigPath = $bundle->getPath() . '/../../behat.yml';
         $this->renderFile('DisideGeneratorBundle:Feature:behat.yml.twig', $behatConfigPath, array(

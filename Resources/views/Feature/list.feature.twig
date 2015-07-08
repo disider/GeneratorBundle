@@ -1,0 +1,22 @@
+{% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+{% set properties = '| ' %}
+{% set values = '| ' %}
+{%- for field in fields %}
+    {% set properties = properties ~ field.name  ~ ' | ' %}
+    {% set values = values ~ field.value  ~ ' | ' %}
+{%- endfor %}
+
+Feature: User can list {{ entity_name }}
+
+  Background:
+    Given there are {{ entity_name|pluralize }}:
+      {{ properties }}
+      {{ values }}
+      {{ values }}
+
+  Scenario: I see the {{ entity_name|pluralize }} list
+    When I visit "/{{ entity_path }}"
+    Then I should see 2 "{{ entity_path|singularize }}"
+    And I should see the "/{{ entity_path }}/new" link
+    And I should see the "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit" link
+    And I should see the "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit" link
