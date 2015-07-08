@@ -34,7 +34,7 @@ class FormGenerator extends BaseGenerator
             'entity_class' => $entityClass,
             'bundle' => $bundle->getName(),
             'form_class' => $className,
-            'form_type_name' => strtolower(substr($className, 0, -4)),
+            'form_type_name' => $this->getEntityRoutePrefix($entityClass)
         ));
     }
 

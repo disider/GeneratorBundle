@@ -4,7 +4,7 @@ Feature: User creates a {{ entity_name }}
 
   Scenario: I create a {{ entity_name }}
     Given I visit "/{{ entity_path }}/new"
-    When I fill the "{{ entity_path|singularize }}" fields with:
+    When I fill the "{{ entity_path|singularize|replace('-', '_') }}" fields with:
 {% for field in fields %}
       {{ ' | ' ~ field.name  ~ ' | '  ~ field.value  ~ ' | ' }}
 {% endfor %}

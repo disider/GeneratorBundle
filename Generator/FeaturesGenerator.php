@@ -22,6 +22,7 @@ class FeaturesGenerator extends BaseGenerator
             'fields' => $this->getFieldsWithType($metadata),
             'namespace' => $bundle->getNamespace(),
             'entity_namespace' => implode('\\', $parts),
+            'entity_name' => $this->getEntityName($entity),
             'entity' => $entityClass,
             'bundle' => $bundle->getName(),
             'route_prefix' => $this->getEntityRoutePrefix($entity),

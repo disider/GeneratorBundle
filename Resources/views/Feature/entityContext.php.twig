@@ -9,8 +9,8 @@ class {{ entity }}Context extends BaseSubContext
 {
 
     /**
-     * @Given /^there is a {{ route_prefix|replace('_', '') }}:$/
-     * @Given /^there are {{ route_prefix|pluralize|replace('_', '') }}:$/
+     * @Given /^there is a {{ entity_name }}:$/
+     * @Given /^there are {{ entity_name|pluralize }}:$/
      */
     public function thereAre{{ entity|pluralize }}(TableNode $table)
     {
@@ -28,8 +28,7 @@ class {{ entity }}Context extends BaseSubContext
             {% elseif field.type == 'date' %}
                 {% set method = 'Date' %}
             {% endif %}
-
-            $entity->set{{ field.name|capitalize }}($this->get{{ method }}Value($values, '{{ field.name }}'));
+            $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}'));
 
         {%- endfor %}
 
