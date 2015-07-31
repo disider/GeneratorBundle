@@ -12,7 +12,7 @@ class GenerateFormCommand extends BaseGenerateDoctrineCommand
     {
         $this
             ->setName('diside:generate:form')
-            ->addArgument('entity', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');;
+            ->addArgument('entity', InputArgument::REQUIRED, 'A entity name');
     }
 
     protected function createGenerator()

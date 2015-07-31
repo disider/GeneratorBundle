@@ -6,6 +6,7 @@ namespace Diside\GeneratorBundle\Command;
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -18,7 +19,8 @@ class GenerateCRUDCommand extends DoctrineCommand
     {
         $this
             ->setName('diside:generate:crud')
-            ->addArgument('name', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name');
+            ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
+            ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation');
     }
 
     /**
@@ -26,7 +28,8 @@ class GenerateCRUDCommand extends DoctrineCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityName = $input->getArgument('name');
+        $entityName = $input->getArgument('entity');
+        $addSecurity = $input->getOption('add-security');
 
         $this->executeCommand(
             sprintf('app/console doctrine:generate:entities %s --path=src/ --no-backup', $entityName),
@@ -37,7 +40,7 @@ class GenerateCRUDCommand extends DoctrineCommand
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:controller %s', $entityName),
+            sprintf('app/console diside:generate:controller %s' . ($addSecurity ? ' --add-security' : ''), $entityName),
             $output);
 
         $this->executeCommand(

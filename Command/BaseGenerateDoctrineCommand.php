@@ -10,11 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
 {
 
-    /**
-     * @see Command
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->preExecute($input, $output);
+
         $entity = Validators::validateEntityName($input->getArgument('entity'));
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
@@ -26,6 +25,10 @@ abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
         $outputMessage = $generator->generate($bundle, $entity, $metadata[0]);
 
         $this->writeOutput($output, $outputMessage);
+    }
+
+    protected function preExecute(InputInterface $input, OutputInterface $output)
+    {
     }
 
     abstract protected function writeOutput(OutputInterface $output, $outputMessage);

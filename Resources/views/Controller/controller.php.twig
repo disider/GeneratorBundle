@@ -6,6 +6,9 @@ namespace {{ namespace }}\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+{% if security %}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+{% endif %}
 use Diside\GeneratorBundle\Form\Processor\DefaultFormProcessor;
 use Diside\GeneratorBundle\Controller\BaseController;
 use {{ namespace }}\Entity\{{ entity }};
@@ -13,6 +16,9 @@ use {{ namespace }}\Entity\{{ entity }};
 
 /**
  * @Route("/{{ path|pluralize }}")
+{% if security %}
+ * @Security("is_granted('IS_AUTHENTICATED_REMEMBERED')")
+{% endif %}
  */
 {% block class_definition %}
 class {{ entity }}Controller extends BaseController

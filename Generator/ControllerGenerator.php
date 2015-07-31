@@ -12,6 +12,13 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class ControllerGenerator extends BaseGenerator
 {
+    /** @var bool */
+    private $security;
+
+    public function setSecurity($value)
+    {
+        $this->security = $value;
+    }
 
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
@@ -23,6 +30,7 @@ class ControllerGenerator extends BaseGenerator
         }
 
         $this->renderFile('DisideGeneratorBundle:Controller:controller.php.twig', $classPath, array(
+            'security' => $this->security,
             'namespace' => $bundle->getNamespace(),
             'entity' => $entity,
             'path' => $this->getPath($entity),
