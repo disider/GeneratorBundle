@@ -1,0 +1,21 @@
+<?php
+
+namespace {{ namespace }}\Features\Context;
+
+use Behat\Behat\Context\BehatContext;
+use Behat\Symfony2Extension\Context\KernelAwareInterface;
+use Diside\BehatExtension\Context\ContextTrait;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+
+class BaseSubContext extends BehatContext implements KernelAwareInterface
+{
+    use ContextTrait;
+    use EntityLookupContextTrait;
+
+    protected function getExpressionLanguage()
+    {
+        return new ExpressionLanguage();
+    }
+
+}

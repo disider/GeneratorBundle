@@ -11,12 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateControllerCommand extends BaseGenerateDoctrineCommand
 {
+
     /** @var bool */
     private $addSecurity;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function configure()
     {
         $this

@@ -34,12 +34,13 @@ class ControllerGenerator extends BaseGenerator
             'namespace' => $bundle->getNamespace(),
             'entity' => $entity,
             'path' => $this->getPath($entity),
-            'route_prefix' => $this->getRoutePrefix($entity),
+            'route_prefix' => $this->getEntityRoutePrefix($entity),
         ));
 
         return $this->render('DisideGeneratorBundle:Service:services.html.twig', array(
             'namespace' => $bundle->getNamespace(),
             'entity' => $entity,
+            'route_prefix' => $this->getEntityRoutePrefix($entity),
         ));
 
     }

@@ -1,0 +1,23 @@
+{% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+{% set properties = '| ' %}
+{% set values = '| ' %}
+{%- for field in fields %}
+    {% set properties = properties ~ field.name  ~ ' | ' %}
+    {% set values = values ~ field.value  ~ ' | ' %}
+{%- endfor %}
+
+Feature: User can delete a {{ entity_name }}
+
+  Background:
+    Given there is a {{ entity_name }}:
+      {{ properties }}
+      {{ values }}
+
+  Scenario: I can delete a {{ entity_name }}
+    When I visit "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/delete"
+    Then I should be on "/{{ entity_path }}"
+    And I should see 0 "{{ entity_path|singularize }}"
+
+  Scenario: I cannot delete an undefined {{ entity_name }}
+    When I try to visit "/{{ entity_path }}/0/delete"
+    Then the response status code should be 404

@@ -36,9 +36,14 @@ abstract class BaseGenerator extends Generator
         return Inflect::pluralize($path);
     }
 
-    protected function getRoutePrefix($entity)
+    protected function getEntityRoutePrefix($entity)
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $entity));
+    }
+
+    protected function getEntityName($entity)
+    {
+        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $entity));
     }
 
     protected function getFieldsFromMetadata(ClassMetadataInfo $metadata)
@@ -58,5 +63,6 @@ abstract class BaseGenerator extends Generator
 
         return $fields;
     }
+
 
 }

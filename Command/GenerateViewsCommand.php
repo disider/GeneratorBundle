@@ -4,10 +4,7 @@ namespace Diside\GeneratorBundle\Command;
 
 
 use Diside\GeneratorBundle\Generator\ViewsGenerator;
-use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCommand;
-use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateViewsCommand extends BaseGenerateDoctrineCommand
@@ -29,6 +26,6 @@ class GenerateViewsCommand extends BaseGenerateDoctrineCommand
 
     protected function writeOutput(OutputInterface $output, $outputMessage)
     {
-        $output->writeln('The new views file has been created.');
+        $output->writeln('New view files have been created.');
     }
 }

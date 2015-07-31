@@ -1,0 +1,39 @@
+<?php
+
+namespace {{ namespace }}\Features\Context;
+
+use Behat\Gherkin\Node\TableNode;
+use {{ namespace }}\Entity\{{ entity }};
+
+class {{ entity }}Context extends BaseSubContext
+{
+
+    /**
+     * @Given /^there is a {{ entity_name }}:$/
+     * @Given /^there are {{ entity_name|pluralize }}:$/
+     */
+    public function thereAre{{ entity|pluralize }}(TableNode $table)
+    {
+        $repository = $this->getContainer()->get('{{ route_prefix }}_repository');
+
+        foreach ($table->getHash() as $values) {
+            $entity= new {{ entity }}();
+
+        {%- for field in fields %}
+            {% set method = '' %}
+            {% if field.type == 'boolean' %}
+                {% set method = 'Bool' %}
+            {% elseif field.type == 'integer' %}
+                {% set method = 'Int' %}
+            {% elseif field.type == 'date' %}
+                {% set method = 'Date' %}
+            {% endif %}
+            $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}'));
+
+        {%- endfor %}
+
+            $repository->save($entity);
+        }
+    }
+
+}

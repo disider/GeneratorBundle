@@ -2,7 +2,6 @@
 
 namespace Diside\GeneratorBundle\Command;
 
-
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,9 +11,7 @@ use Symfony\Component\Process\Process;
 
 class GenerateCRUDCommand extends DoctrineCommand
 {
-    /**
-     * {@inheritDoc}
-     */
+
     protected function configure()
     {
         $this
@@ -23,9 +20,6 @@ class GenerateCRUDCommand extends DoctrineCommand
             ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityName = $input->getArgument('entity');

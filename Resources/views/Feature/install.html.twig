@@ -1,0 +1,25 @@
+{% block config %}
+-> Composer:
+
+    "require-dev": {
+        "behat/behat": "2.5.*@stable",
+        "behat/symfony2-extension": "*",
+        "behat/mink": "*",
+        "behat/mink-extension": "*",
+        "behat/mink-browserkit-driver": "*",
+        "behat/mink-selenium2-driver": "*",
+        "polishsymfonycommunity/symfony2-mocker-extension": "*",
+        "diside/behat-extension": "dev-master"
+    }
+-> AppKernel:
+
+    protected function getContainerBaseClass()
+    {
+        if (in_array($this->environment, array('test', 'dev'))) {
+            return '\PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer';
+        }
+
+        return parent::getContainerBaseClass();
+    }
+
+{% endblock config %}
