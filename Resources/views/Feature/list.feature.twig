@@ -14,10 +14,7 @@ Feature: User can list {{ entity_name }}
       {{ values }}
       {{ values }}
 {% if security %}
-    And there is a user:
-      | email            | password |
-      | user@example.com | secret   |
-    And I am logged as "user@example.com" and "secret"
+    And I am logged as "user" and "secret"
 {% endif %}
 
 
