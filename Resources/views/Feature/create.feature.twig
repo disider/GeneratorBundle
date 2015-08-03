@@ -2,6 +2,14 @@
 
 Feature: User creates a {{ entity_name }}
 
+{% if security %}
+  Background:
+    Given there is a user:
+      | email            | password |
+      | user@example.com | secret   |
+    And I am logged as "user@example.com" and "secret"
+{% endif %}
+
   Scenario: I create a {{ entity_name }}
     Given I visit "/{{ entity_path }}/new"
     When I fill the "{{ entity_path|singularize|replace('-', '_') }}" fields with:

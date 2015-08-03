@@ -13,7 +13,7 @@ class GenerateControllerCommand extends BaseGenerateDoctrineCommand
 {
 
     /** @var bool */
-    private $addSecurity;
+    private $security;
 
     protected function configure()
     {
@@ -25,13 +25,13 @@ class GenerateControllerCommand extends BaseGenerateDoctrineCommand
 
     protected function preExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->addSecurity = $input->getOption('add-security');
+        $this->security = $input->getOption('add-security');
     }
 
     protected function createGenerator()
     {
         $controller = new ControllerGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
-        $controller->setSecurity($this->addSecurity);
+        $controller->setSecurity($this->security);
 
         return $controller;
     }

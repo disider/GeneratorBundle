@@ -1,0 +1,11 @@
+Feature: Anonymous cannot access {{ entity_name }} pages
+
+  Scenario Outline: Denied actions
+    When I am on "<route>"
+    Then I should be on "/login"
+    Examples:
+      | route                       |
+      | /{{ entity_path }}          |
+      | /{{ entity_path }}/new      |
+      | /{{ entity_path }}/0/edit   |
+      | /{{ entity_path }}/0/delete |

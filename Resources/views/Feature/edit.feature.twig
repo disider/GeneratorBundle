@@ -13,6 +13,12 @@ Feature: User can edit a {{ entity_name }}
     Given there is a {{ entity_name }}:
       {{ properties }}
       {{ values }}
+{% if security %}
+    And there is a user:
+        | email            | password |
+        | user@example.com | secret   |
+    And I am logged as "user@example.com" and "secret"
+{% endif %}
 
   Scenario: I can edit a {{ entity_name }}
     Given I visit "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"

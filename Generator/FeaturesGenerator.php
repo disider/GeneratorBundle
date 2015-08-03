@@ -7,6 +7,9 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class FeaturesGenerator extends BaseGenerator
 {
+    /** @var bool */
+    private $security;
+
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
         $parts = explode('\\', $entity);
@@ -32,6 +35,7 @@ class FeaturesGenerator extends BaseGenerator
             'route_prefix' => $this->getEntityRoutePrefix($entity),
         ));
 
+        $this->renderDenyActions($bundle, $entity, $metadata, $entityClass);
         $this->renderFeature('Delete.feature', $bundle, $entity, $metadata, $entityClass);
         $this->renderFeature('List.feature', $bundle, $entity, $metadata, $entityClass);
         $this->renderFeature('Create.feature', $bundle, $entity, $metadata, $entityClass);
@@ -81,14 +85,39 @@ class FeaturesGenerator extends BaseGenerator
 
     protected function renderFeature($fileName, BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $entityClass)
     {
-        $indexPath = $bundle->getPath() . '/Features/' . $entityClass . '/' . $fileName;
+        $indexPath = sprintf($this->security ? '%s/Features/%s/User/%s' : '%s/Features/%s/%s',
+            $bundle->getPath(),
+            $entityClass,
+            $fileName);
+
         $this->renderFile('DisideGeneratorBundle:Feature:' . strtolower($fileName) . '.twig', $indexPath, array(
+            'security' => $this->security,
             'fields' => $this->getFieldsWithDefaultValues($metadata),
             'entity_name' => $this->getEntityName($entity),
             'entity_path' => $this->getPath($entity),
             'entity' => $entityClass,
         ));
-        return $indexPath;
+    }
+
+    protected function renderDenyActions(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $entityClass)
+    {
+        if (!$this->security)
+            return;
+
+        $indexPath = sprintf('%s/Features/%s/Anonymous/DenyActions.feature', $bundle->getPath(), $entityClass);
+
+        $this->renderFile('DisideGeneratorBundle:Feature:denyActions.feature.twig', $indexPath, array(
+            'security' => $this->security,
+            'fields' => $this->getFieldsWithDefaultValues($metadata),
+            'entity_name' => $this->getEntityName($entity),
+            'entity_path' => $this->getPath($entity),
+            'entity' => $entityClass,
+        ));
+    }
+
+    public function setSecurity($security)
+    {
+        $this->security = $security;
     }
 
 }
