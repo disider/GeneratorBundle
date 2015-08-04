@@ -25,7 +25,7 @@ class ViewsGenerator extends BaseGenerator
         $indexPath = $this->basePath . '/index.html.twig';
 
         $this->renderFile('DisideGeneratorBundle:View:index.html.twig.twig', $indexPath, array(
-            'fields' => $this->getFieldsFromMetadata($metadata),
+            'fields' => $this->getFieldsWithType($metadata),
             'route_prefix' => $this->getEntityRoutePrefix($entity),
             'message_prefix' => $this->getEntityRoutePrefix($entity),
             'entity' => $entity,

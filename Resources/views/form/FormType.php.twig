@@ -22,11 +22,22 @@ class {{ form_class }} extends AbstractType
     {
         $builder
         {%- for field in fields %}
+            {%- if field.type == 'date' %}
 
-            ->add('{{ field }}', null, array('label' => 'fields.{{ field }}'))
+            ->add('{{ field.name }}', 'date', array(
+                'label' => 'fields.{{ field.name }}',
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy'
+            ))
+            {%- else %}
+
+            ->add('{{ field.name }}', null, array(
+                'label' => 'fields.{{ field.name }}'
+            ))
+            {%- endif %}
         {%- endfor %}
 
-            ->add('submit', 'submit', array('label' => 'actions.save'))
+        ->add('submit', 'submit', array('label' => 'actions.save'))
         ;
     }
     {% endif %}

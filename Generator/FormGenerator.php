@@ -28,7 +28,7 @@ class FormGenerator extends BaseGenerator
         array_pop($parts);
 
         $this->renderFile('DisideGeneratorBundle:Form:formType.php.twig', $classPath, array(
-            'fields' => $this->getFieldsFromMetadata($metadata),
+            'fields' => $this->getFieldsWithType($metadata),
             'namespace' => $bundle->getNamespace(),
             'entity_namespace' => implode('\\', $parts),
             'entity_class' => $entityClass,
