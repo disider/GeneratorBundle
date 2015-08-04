@@ -54,13 +54,16 @@ class FeaturesGenerator extends BaseGenerator
         $values = array();
 
         foreach ($fields as $field) {
+            $type = $field['type'];
             $value = 'TEXT';
-            if ($field['type'] == 'integer')
+            if ($type == 'integer' || $type == 'float')
                 $value = 1;
-            else if ($field['type'] == 'boolean')
+            else if ($type == 'boolean')
                 $value = true;
-            else if ($field['type'] == 'date')
+            else if ($type == 'date')
                 $value = '01/09/2015';
+            else if ($type == 'datetime')
+                continue;
 
             $values[$field['name']] = array('name' => $field['name'], 'value' => $value);
         }

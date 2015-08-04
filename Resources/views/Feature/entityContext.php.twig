@@ -21,14 +21,22 @@ class {{ entity }}Context extends BaseSubContext
 
         {%- for field in fields %}
             {% set method = '' %}
+            {% set defaultValue = '' %}
             {% if field.type == 'boolean' %}
                 {% set method = 'Bool' %}
+                {% set defaultValue = false %}
             {% elseif field.type == 'integer' %}
                 {% set method = 'Int' %}
-            {% elseif field.type == 'date' %}
+                {% set defaultValue = 3 %}
+            {% elseif field.type == 'float' %}
+                {% set method = 'Float' %}
+                {% set defaultValue = 2.0 %}
+            {% elseif field.type == 'date' or field.type == 'datetime' %}
                 {% set method = 'Date' %}
+                {% set defaultValue = '10/10/2015 00:00:00' %}
             {% endif %}
-            $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}'));
+
+        $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}', '{{ defaultValue }}'));
 
         {%- endfor %}
 

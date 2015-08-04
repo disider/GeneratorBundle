@@ -17,7 +17,6 @@ Feature: User can list {{ entity_name }}
     And I am logged as "user" and "secret"
 {% endif %}
 
-
   Scenario: I see the {{ entity_name|pluralize }} list
     When I visit "/{{ entity_path }}"
     Then I should see 2 "{{ entity_path|singularize }}"
