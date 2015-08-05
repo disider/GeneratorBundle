@@ -18,18 +18,11 @@ class ApiControllerGenerator extends BaseGenerator
 
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
-        $className = 'Api' . $entity . 'Controller';
-        $classPath = $bundle->getPath() . '/Controller/' . $className . '.php';
-
-        if (file_exists($classPath)) {
-            throw new \RuntimeException(sprintf('Unable to generate the %s class as it already exists under the %s file', $className, $classPath));
-        }
-
+        $this->generateEntityController($bundle, $entity, $metadata);
         $this->generateBaseController($bundle);
         $this->generateException($bundle);
         $this->generateModel($bundle);
         $this->generateListener($bundle);
-        $this->generateEntityController($bundle, $entity, $classPath);
 
         return $this->render('DisideGeneratorBundle:Controller:apiConfig.html.twig', array());
 
@@ -37,7 +30,7 @@ class ApiControllerGenerator extends BaseGenerator
 
     protected function generateBaseController(BundleInterface $bundle)
     {
-        $baseControllerPath = $bundle->getPath() . '/Controller/BaseApiController.php';
+        $baseControllerPath = $bundle->getPath() . '/Controller/Api/BaseApiController.php';
 
         if (!$this->filesystem->exists($baseControllerPath)){
             $this->renderFile('DisideGeneratorBundle:Controller:baseApiController.php.twig', $baseControllerPath, array(
@@ -79,14 +72,28 @@ class ApiControllerGenerator extends BaseGenerator
         }
     }
 
-    protected function generateEntityController(BundleInterface $bundle, $entity, $classPath)
+    protected function generateEntityController(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
+        $className = 'Api' . $entity . 'Controller';
+        $classPath = $bundle->getPath() . '/Controller/Api/' . $className . '.php';
+
+        if (file_exists($classPath)) {
+            throw new \RuntimeException(sprintf('Unable to generate the %s class as it already exists under the %s file', $className, $classPath));
+        }
+
         $this->renderFile('DisideGeneratorBundle:Controller:apiEntityController.php.twig', $classPath, array(
             'security' => $this->security,
             'namespace' => $bundle->getNamespace(),
             'entity' => $entity,
             'path' => $this->getPath($entity),
             'route_prefix' => $this->getEntityRoutePrefix($entity),
+            'fields' => $this->getEntityFields($metadata)
         ));
+    }
+
+    private function getEntityFields(ClassMetadataInfo $metadata)
+    {
+        $fields = $metadata->getFieldNames();
+        return array_diff($fields, array('id'));
     }
 }

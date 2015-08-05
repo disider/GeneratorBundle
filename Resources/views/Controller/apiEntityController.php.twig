@@ -1,7 +1,7 @@
 <?php
 
 
-namespace {{ namespace }}\Controller;
+namespace {{ namespace }}\Controller\Api;
 
 {% block use_statements %}
 use {{ namespace }}\Entity\{{ entity }};
@@ -53,7 +53,7 @@ class Api{{ entity }}Controller extends BaseApiController
     public function editAction(Request $request, {{ entity }} $entity)
     {
         $object = $this->deserialize($request->getContent(), '{{ namespace }}\Entity\{{ entity }}');
-        $entity->setName($object->getName());
+        $entity = $this->updateEntity($entity, $object);
 
         return $this->saveEntity($entity, $this->get('{{ route_prefix|lower }}_repository'));
     }
@@ -66,5 +66,14 @@ class Api{{ entity }}Controller extends BaseApiController
     {
         $this->get('{{ route_prefix|lower }}_repository')->delete($entity);
         return $this->createApiResponse(array('status' => 'success'));
+    }
+
+    private function updateEntity({{ entity }} $entity, {{ entity }} $object)
+    {
+    {% for field in fields %}
+        $entity->set{{ field|capitalize }}($object->get{{ field|capitalize }}());
+    {% endfor %}
+
+        return $entity;
     }
 }
