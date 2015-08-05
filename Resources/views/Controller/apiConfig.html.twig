@@ -1,0 +1,19 @@
+{% block config %}
+-> Composer:
+    "require": {
+        "jms/serializer-bundle" : "dev-master"
+    }
+
+-> AppKernel:
+    $bundles = array(
+        new JMS\SerializerBundle\JMSSerializerBundle()
+    )
+
+-> Listener:
+    <service id="api_exception_listener" class="AppBundle\Listener\ApiExceptionListener">
+        <argument type="service" id="security.context"/>
+        <argument type="service" id="security.authentication.trust_resolver"/>
+        <argument>%kernel.debug%</argument>
+        <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="100"/>
+    </service>
+{% endblock config %}

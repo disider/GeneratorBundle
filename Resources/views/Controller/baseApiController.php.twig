@@ -1,0 +1,56 @@
+<?php
+
+
+namespace {{ namespace }}\Controller;
+
+
+use Diside\GeneratorBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\ConstraintViolation;
+
+abstract class BaseApiController extends BaseController
+{
+    protected function serialize($object)
+    {
+        $serializer = $this->get('jms_serializer');
+        return $serializer->serialize($object, 'json');
+    }
+
+    protected function deserialize($object, $class)
+    {
+        $serializer = $this->get('jms_serializer');
+        return $serializer->deserialize($object, $class, 'json');
+    }
+
+    protected function createApiResponse($data, $statusCode = 200)
+    {
+        $json = $this->serialize($data);
+
+        $response = new Response(
+            $json, $statusCode, array(
+                'Content-Type' => 'application/hal+json'
+            )
+        );
+
+        return $response;
+    }
+
+    protected function saveEntity($entity, $repository)
+    {
+        $validator = $this->get('validator');
+        $violations = $validator->validate($entity);
+
+        $errors = array();
+        /** @var ConstraintViolation $violation */
+        foreach ($violations as $violation) {
+            $errors[$violation->getPropertyPath()] = $violation->getMessage();
+        }
+
+        if (count($errors) > 0) {
+            return $this->createApiResponse(array('errors' => $errors), 400);
+        }
+
+        $repository->save($entity);
+        return $this->createApiResponse($entity);
+    }
+}

@@ -1,0 +1,78 @@
+<?php
+
+namespace {{ namespace }}\Model;
+
+use Symfony\Component\HttpFoundation\Response;
+
+class ApiProblem {
+    const WRONG_MD5 = 'wrong-md5';
+
+    private static $titles = array(
+        self::WRONG_MD5 => 'Wrong file MD5',
+    );
+
+    private $statusCode;
+
+    private $type;
+
+    private $title;
+
+    private $extraData = array();
+
+    public function __construct($statusCode, $type = null)
+    {
+        $this->statusCode = $statusCode;
+        $this->type = $type;
+
+        if($type == null) {
+            $this->type = 'about:blank';
+            $this->title = isset(Response::$statusTexts[$statusCode])
+                ? Response::$statusTexts[$statusCode]
+                : 'Unknown status code';
+        }
+        else {
+            if (!isset(self::$titles[$type])) {
+                throw new \Exception(
+                    sprintf(
+                        'No title for type "%s". Did you make it up?',
+                        $type
+                    )
+                );
+            }
+
+            $this->title = self::$titles[$type];
+        }
+    }
+
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function set($name, $value)
+    {
+        $this->extraData[$name] = $value;
+    }
+
+    public function toArray()
+    {
+        return array_merge(
+            $this->extraData,
+            array(
+                'status' => $this->statusCode,
+                'type' => $this->type,
+                'title' => $this->title,
+            )
+        );
+    }
+
+    public function formatTitle($placeholder, $replace)
+    {
+        $this->title = str_replace($placeholder, $replace, $this->title);
+    }
+}

@@ -1,0 +1,115 @@
+<?php
+
+namespace {{ namespace }}\Listener;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use {{ namespace }}\Exception\ApiException;
+use {{ namespace }}\Model\ApiProblem;
+
+class ApiExceptionListener
+{
+    /**
+     * @var SecurityContextInterface
+     */
+    private $securityContext;
+
+    /**
+     * @var AuthenticationTrustResolverInterface
+     */
+    private $trustResolver;
+
+    /** @var bool */
+    private $debug;
+
+    public function __construct(SecurityContextInterface $securityContext, AuthenticationTrustResolverInterface $trustResolver, $debug)
+    {
+        $this->debug = $debug;
+        $this->securityContext = $securityContext;
+        $this->trustResolver = $trustResolver;
+    }
+
+    /**
+     * Registers a onKernelException listener to take care of security exceptions.
+     *
+     * @param EventDispatcherInterface $dispatcher An EventDispatcherInterface instance
+     */
+    public function register(EventDispatcherInterface $dispatcher)
+    {
+        $dispatcher->addListener(KernelEvents::EXCEPTION, array($this, 'onKernelException'));
+    }
+
+    /**
+     * Unregisters the dispatcher.
+     *
+     * @param EventDispatcherInterface $dispatcher An EventDispatcherInterface instance
+     */
+    public function unregister(EventDispatcherInterface $dispatcher)
+    {
+        $dispatcher->removeListener(KernelEvents::EXCEPTION, array($this, 'onKernelException'));
+    }
+
+    /**
+     * Handles security related exceptions.
+     *
+     * @param GetResponseForExceptionEvent $event An GetResponseForExceptionEvent instance
+     */
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        /** @var \Exception $exception */
+        $exception = $event->getException();
+        $request = $event->getRequest();
+
+        if (strpos($request->getPathInfo(), '/api') !== 0) {
+            return;
+        }
+
+        if ($this->debug && !($exception instanceof HttpExceptionInterface)) {
+            //   return;
+        }
+
+        if ($exception instanceof ApiException) {
+            /** @var ApiException $exception */
+
+            $apiProblem = $exception->getApiProblem();
+        } else {
+            if ($exception instanceof HttpException) {
+                /** @var HttpException $exception */
+
+                $apiProblem = new ApiProblem($exception->getStatusCode());
+                $apiProblem->set('detail', $exception->getMessage());
+            } elseif ($exception instanceof AccessDeniedException) {
+                $token = $this->securityContext->getToken();
+
+                if(!$this->trustResolver->isFullFledged($token)){
+                    $apiProblem = new ApiProblem(401);
+                }
+                else {
+                    $apiProblem = new ApiProblem(403);
+                }
+                /** @var AccessDeniedException $exception */
+            } else {
+                $apiProblem = new ApiProblem(500);
+                if ($this->debug) {
+                    $apiProblem->set('exception', get_class($exception));
+                    $apiProblem->set('details', $exception->getMessage());
+                    $apiProblem->set('stack', $exception->getTraceAsString());
+                }
+            }
+        }
+
+        $response = new JsonResponse($apiProblem->toArray(), $apiProblem->getStatusCode());
+        $response->headers->set('Content-Type', 'application/problem+json');
+
+        $event->setResponse($response);
+        $event->stopPropagation();
+
+    }
+}

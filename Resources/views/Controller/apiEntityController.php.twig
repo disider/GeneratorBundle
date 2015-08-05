@@ -1,0 +1,70 @@
+<?php
+
+
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use {{ namespace }}\Entity\{{ entity }};
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+{% endblock use_statements %}
+
+/**
+ * @Route("/api/{{ path|pluralize }}")
+ */
+{% block class_definition %}
+class Api{{ entity }}Controller extends BaseApiController
+{% endblock class_definition %}
+{
+    /**
+     * @Route("", name="api_{{ route_prefix }}_list")
+     * @Method("GET")
+     */
+    public function listAction(Request $request)
+    {
+        $entities = $this->get('{{ route_prefix|lower }}_repository')->findAll();
+        return $this->createApiResponse(array('{{ (entity[:1]|lower ~ entity[1:])|pluralize }}' => $entities));
+    }
+
+    /**
+    * @Route("", name="api_{{ route_prefix }}_new")
+    * @Method("POST")
+    */
+    public function newAction(Request $request)
+    {
+        $object = $this->deserialize($request->getContent(), '{{ namespace }}\Entity\{{ entity }}');
+        return $this->saveEntity($object, $this->get('{{ route_prefix|lower }}_repository'));
+    }
+
+    /**
+    * @Route("/{id}", name="api_{{ route_prefix }}_get")
+    * @Method("GET")
+    */
+    public function getAction(Request $request, {{ entity }} $entity)
+    {
+        return $this->createApiResponse($entity);
+    }
+
+    /**
+    * @Route("/{id}", name="api_{{ route_prefix }}_edit")
+    * @Method("PUT")
+    */
+    public function editAction(Request $request, {{ entity }} $entity)
+    {
+        $object = $this->deserialize($request->getContent(), '{{ namespace }}\Entity\{{ entity }}');
+        $entity->setName($object->getName());
+
+        return $this->saveEntity($entity, $this->get('{{ route_prefix|lower }}_repository'));
+    }
+
+    /**
+    * @Route("/{id}", name="api_{{ route_prefix }}_delete")
+    * @Method("DELETE")
+    */
+    public function deleteAction(Request $request, {{ entity }} $entity)
+    {
+        $this->get('{{ route_prefix|lower }}_repository')->delete($entity);
+        return $this->createApiResponse(array('status' => 'success'));
+    }
+}
