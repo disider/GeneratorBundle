@@ -48,34 +48,22 @@ class FeaturesGenerator extends BaseGenerator
 
     }
 
-    protected function getFieldsWithType(ClassMetadataInfo $metadata)
-    {
-        $fields = array();
-
-        foreach ($metadata->fieldMappings as $fieldName => $values) {
-            $fields[$fieldName] = array('name' => $fieldName, 'type' => $values['type']);
-        }
-
-        if (!$metadata->isIdentifierNatural()) {
-            foreach ($metadata->identifier as $identifier)
-                unset($fields[$identifier]);
-        }
-
-        return $fields;
-    }
-
-
     protected function getFieldsWithDefaultValues(ClassMetadataInfo $metadata)
     {
         $fields = $this->getFieldsWithType($metadata);
         $values = array();
 
         foreach ($fields as $field) {
+            $type = $field['type'];
             $value = 'TEXT';
-            if ($field['type'] == 'integer')
+            if ($type == 'integer' || $type == 'float')
                 $value = 1;
-            else if ($field['type'] == 'boolean')
+            else if ($type == 'boolean')
                 $value = true;
+            else if ($type == 'date')
+                $value = '01/09/2015';
+            else if ($type == 'datetime')
+                continue;
 
             $values[$field['name']] = array('name' => $field['name'], 'value' => $value);
         }

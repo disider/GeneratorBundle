@@ -64,5 +64,21 @@ abstract class BaseGenerator extends Generator
         return $fields;
     }
 
+    protected function getFieldsWithType(ClassMetadataInfo $metadata)
+    {
+        $fields = array();
+
+        foreach ($metadata->fieldMappings as $fieldName => $values) {
+            $fields[$fieldName] = array('name' => $fieldName, 'type' => $values['type']);
+        }
+
+        if (!$metadata->isIdentifierNatural()) {
+            foreach ($metadata->identifier as $identifier)
+                unset($fields[$identifier]);
+        }
+
+        return $fields;
+    }
+
 
 }

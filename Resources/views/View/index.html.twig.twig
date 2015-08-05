@@ -17,23 +17,28 @@
         <table class="table table-striped">
             <tr>
                 {%- for field in fields %}
-                <th>{{ "{{ 'fields." ~ field ~ "'|trans }}" }}</th>
+                <th>{{ "{{ 'fields." ~ field.name ~ "'|trans }}" }}</th>
                 {%- endfor %}
                 <th>{{ "{{ 'actions.title'|trans }}" }}</th>
             </tr>
 
         {{ " {% for entity in " ~ entity[:1]|lower ~ entity[1:]|pluralize  ~ " %}" }}
-            <tr class="{{ route_prefix|replace('_', '-') }}">
-                {% for field in fields %}
-    <td class="{{ field }}">{{ "{{ entity." ~ field ~ " }}" }}</td>
-                {% endfor %}
-                <td class="text-center">
-                    <a class="btn btn-sm btn-default"
-                       href="{{ "{{ path('"~route_prefix ~ "_edit', {'id': entity.id }) }}" }}">{{ "{{ icon('pencil') }}" }}</a>
-                    <a class="btn btn-sm btn-danger"
-                       href="{{ "{{ path('"~route_prefix ~ "_delete', {'id': entity.id }) }}" }}">{{ "{{ icon('trash') }}" }}</a>
-                </td>
-            </tr>
+        <tr class="{{ route_prefix|replace('_', '-') }}">
+    {% for field in fields %}
+
+        {% if field.type == 'date' or field.type == 'datetime' %}
+    <td class="{{ field.name }}">{{ "{{ entity." ~ field.name ~ "|date }}"}}</td>
+        {% else %}
+    <td class="{{ field.name }}">{{ "{{ entity." ~ field.name ~ " }}"}}</td>
+        {% endif %}
+    {% endfor %}
+    <td class="text-center">
+                <a class="btn btn-sm btn-default"
+                   href="{{ "{{ path('"~route_prefix ~ "_edit', {'id': entity.id }) }}" }}">{{ "{{ icon('pencil') }}" }}</a>
+                <a class="btn btn-sm btn-danger"
+                   href="{{ "{{ path('"~route_prefix ~ "_delete', {'id': entity.id }) }}" }}">{{ "{{ icon('trash') }}" }}</a>
+            </td>
+        </tr>
         {{ "{% endfor %}" }}
         </table>
 
