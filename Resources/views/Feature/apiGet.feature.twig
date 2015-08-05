@@ -1,0 +1,33 @@
+{% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+
+{% set properties = '| ' %}
+{% set values = '| ' %}
+{%- for field in fields %}
+    {% set properties = properties ~ field.name  ~ ' | ' %}
+    {% set values = values ~ field.value  ~ ' | ' %}
+{%- endfor %}
+
+Feature: User can get a {{ entity_name }}
+
+  Background:
+    Given there is a {{ entity_name }}:
+      {{ properties }}
+      {{ values }}
+
+  Scenario: I see the brand
+    When I request "GET /api/{{ entity_path }}/%{{ entity_lookup }}.last.id%"
+    Then the response status code should be 200
+    And the following response properties exist:
+    """
+    id
+{% for field in fields %}
+    {{ field.name }}
+{% endfor %}
+    """
+{% for field in fields %}
+    And the "{{ field.name }}" property should contain "{{ field.value }}"
+{% endfor %}
+
+  Scenario: I cannot see an undefined {{ entity_name }}
+    When I request "GET /api/{{ entity_path }}/0"
+    Then the response status code should be 404

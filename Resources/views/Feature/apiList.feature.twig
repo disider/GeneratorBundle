@@ -1,0 +1,20 @@
+{% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+{% set properties = '| ' %}
+{% set values = '| ' %}
+{%- for field in fields %}
+    {% set properties = properties ~ field.name  ~ ' | ' %}
+    {% set values = values ~ field.value  ~ ' | ' %}
+{%- endfor %}
+
+Feature: User can list {{ entity_name }}
+
+  Background:
+    Given there are {{ entity_name|pluralize }}:
+      {{ properties }}
+      {{ values }}
+      {{ values }}
+
+  Scenario: I see the {{ entity_name|pluralize }} list
+    When I request "GET /api/{{ entity_path }}"
+    Then the response status code should be 200
+    And the "{{ entity_name|pluralize }}" property should contain 2 items

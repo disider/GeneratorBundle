@@ -1,0 +1,5 @@
+{% block config %}
+-> ApiFeatureContext:
+    $this->useContext('{{ route_prefix }}_context', new {{ entity }}Context());
+
+{% endblock config %}

@@ -1,0 +1,33 @@
+<?php
+
+
+namespace {{ namespace }}\Features\Context;
+
+
+use Diside\BehatExtension\Context\ApiAbstractContext;
+use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
+
+class ApiFeatureContext extends ApiAbstractContext
+{
+    use EntityLookupContextTrait;
+
+    private $parameters;
+
+    public function __construct(array $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    protected function getExpressionLanguage()
+    {
+        return new ExpressionLanguage();
+    }
+
+    /**
+    * @BeforeScenario
+    */
+    public function beforeScenario()
+    {
+        $this->buildClient($this->parameters['base_url']);
+    }
+}

@@ -1,0 +1,16 @@
+Feature: Anonymous cannot access {{ entity_name }} pages
+
+  Scenario Outline: Denied actions
+    Given there is a payload:
+    """
+    {}
+    """
+    When I request "<method> <route>"
+    Then the response status code should be 403
+    Examples:
+        | method | route                |
+        | GET    | /api/{{ entity_path }}   |
+        | POST   | /api/{{ entity_path }}   |
+        | GET    | /api/{{ entity_path }}/0 |
+        | PUT    | /api/{{ entity_path }}/0 |
+        | DELETE | /api/{{ entity_path }}/0 |
