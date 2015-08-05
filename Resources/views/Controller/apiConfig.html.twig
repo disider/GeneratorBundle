@@ -1,12 +1,14 @@
 {% block config %}
 -> Composer:
     "require": {
-        "jms/serializer-bundle" : "dev-master"
+        "jms/serializer-bundle" : "~1.0",
+        "willdurand/hateoas-bundle" : "~1.0"
     }
 
 -> AppKernel:
     $bundles = array(
-        new JMS\SerializerBundle\JMSSerializerBundle()
+        new JMS\SerializerBundle\JMSSerializerBundle(),
+        new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle()
     )
 
 -> Listener:
@@ -16,4 +18,7 @@
         <argument>%kernel.debug%</argument>
         <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="100"/>
     </service>
+
+-> Prameters:
+    api_default_page_size: 10
 {% endblock config %}

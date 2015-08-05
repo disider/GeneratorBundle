@@ -27,6 +27,9 @@ Feature: User can edit a {{ entity_name }}
     """
     When I request "PUT /api/{{ entity_path }}/%{{ entity_lookup }}.last.id%"
     Then the response status code should be 200
+    And the response payload contains the following properties:
+    | id               {{ properties }}
+    | %brands.last.id% {{ values }}
 
   Scenario: I cannot edit an undefined {{ entity_name }}
     When I request "PUT /api/{{ entity_path }}/0"

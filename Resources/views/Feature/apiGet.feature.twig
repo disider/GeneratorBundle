@@ -24,9 +24,9 @@ Feature: User can get a {{ entity_name }}
     {{ field.name }}
 {% endfor %}
     """
-{% for field in fields %}
-    And the "{{ field.name }}" property should contain "{{ field.value }}"
-{% endfor %}
+    And the response payload contains the following properties:
+    | id               {{ properties }}
+    | %brands.last.id% {{ values }}
 
   Scenario: I cannot see an undefined {{ entity_name }}
     When I request "GET /api/{{ entity_path }}/0"

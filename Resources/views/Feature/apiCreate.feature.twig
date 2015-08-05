@@ -1,4 +1,10 @@
 {% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
+{% set properties = "" %}
+{% set values = "" %}
+{%- for field in fields %}
+    {% set properties = properties ~ field.name  ~ ' | ' %}
+    {% set values = values ~ field.value  ~ ' | ' %}
+{%- endfor %}
 Feature: User creates a {{ entity_name }}
 
   Scenario: I create a {{ entity_name }}
@@ -14,6 +20,9 @@ Feature: User creates a {{ entity_name }}
     """
     When I request "POST /api/{{ entity_path }}"
     Then the response status code should be 200
+    And the response payload contains the following properties:
+    | id               | {{ properties }}
+    | %brands.last.id% | {{ values }}
 
   Scenario: Cannot create a {{ entity_name }} without required fields
     Given there is a payload:

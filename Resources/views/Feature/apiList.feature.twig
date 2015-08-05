@@ -8,13 +8,29 @@
 
 Feature: User can list {{ entity_name }}
 
-  Background:
+  Scenario: I see the {{ entity_name|pluralize }} list
     Given there are {{ entity_name|pluralize }}:
       {{ properties }}
       {{ values }}
       {{ values }}
-
-  Scenario: I see the {{ entity_name|pluralize }} list
     When I request "GET /api/{{ entity_path }}"
     Then the response status code should be 200
-    And the "{{ entity_name|pluralize }}" property should contain 2 items
+    And the response payload contains the following properties:
+    | page | limit | pages |
+    | 1    | 10    | 1     |
+    And the "_embedded.items" property should be an array
+    And the "_embedded.items" property should contain 2 items
+
+  Scenario: I see the {{ entity_name|pluralize }} list with custom pagination
+      Given there are {{ entity_name|pluralize }}:
+          {{ properties }}
+          {{ values }}
+          {{ values }}
+          {{ values }}
+      When I request "GET /api/{{ entity_path }}?page=2&pageSize=2"
+      Then the response status code should be 200
+      And the response payload contains the following properties:
+      | page | limit | pages |
+      | 2    | 2    | 2     |
+      And the "_embedded.items" property should be an array
+      And the "_embedded.items" property should contain 1 items

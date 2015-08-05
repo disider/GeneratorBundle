@@ -5,6 +5,10 @@ namespace {{ namespace }}\Controller\Api;
 
 
 use Diside\GeneratorBundle\Controller\BaseController;
+use Diside\GeneratorBundle\Entity\Repository\AbstractRepository;
+use Hateoas\Representation\CollectionRepresentation;
+use Hateoas\Representation\PaginatedRepresentation;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolation;
 
@@ -12,27 +16,14 @@ abstract class BaseApiController extends BaseController
 {
     protected function serialize($object)
     {
-        $serializer = $this->get('jms_serializer');
+        $serializer = $this->get('serializer');
         return $serializer->serialize($object, 'json');
     }
 
     protected function deserialize($object, $class)
     {
-        $serializer = $this->get('jms_serializer');
+        $serializer = $this->get('serializer');
         return $serializer->deserialize($object, $class, 'json');
-    }
-
-    protected function createApiResponse($data, $statusCode = 200)
-    {
-        $json = $this->serialize($data);
-
-        $response = new Response(
-            $json, $statusCode, array(
-                'Content-Type' => 'application/hal+json'
-            )
-        );
-
-        return $response;
     }
 
     protected function saveEntity($entity, $repository)
@@ -52,5 +43,40 @@ abstract class BaseApiController extends BaseController
 
         $repository->save($entity);
         return $this->createApiResponse($entity);
+    }
+
+    protected function createApiResponse($data, $statusCode = 200)
+    {
+        $json = $this->serialize($data);
+
+        $response = new Response(
+            $json, $statusCode, array(
+                'Content-Type' => 'application/hal+json'
+            )
+        );
+
+        return $response;
+    }
+
+    protected function createListResponse(Request $request, AbstractRepository $repository)
+    {
+        $page = $request->query->get('page', 1);
+        $pageSize = $request->query->get('pageSize', $this->getParameter('api_default_page_size'));
+
+        $entitiesCount = $repository->countAll();
+        $totalPages = intval($entitiesCount / $pageSize);
+        $totalPages = $entitiesCount % $pageSize > 0 ? $totalPages +1 : $totalPages;
+
+        $entities = $repository->findAllPaginated($page, $pageSize);
+        $paginatedCollection = new PaginatedRepresentation(
+            new CollectionRepresentation($entities),
+            'api_{{ route_prefix }}_list',
+            array(),
+            $page,
+            $pageSize,
+            $totalPages
+        );
+
+        return $this->createApiResponse($paginatedCollection);
     }
 }

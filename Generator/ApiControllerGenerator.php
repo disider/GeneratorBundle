@@ -19,7 +19,7 @@ class ApiControllerGenerator extends BaseGenerator
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
         $this->generateEntityController($bundle, $entity, $metadata);
-        $this->generateBaseController($bundle);
+        $this->generateBaseController($bundle, $entity);
         $this->generateException($bundle);
         $this->generateModel($bundle);
         $this->generateListener($bundle);
@@ -28,13 +28,14 @@ class ApiControllerGenerator extends BaseGenerator
 
     }
 
-    protected function generateBaseController(BundleInterface $bundle)
+    protected function generateBaseController(BundleInterface $bundle, $entity)
     {
         $baseControllerPath = $bundle->getPath() . '/Controller/Api/BaseApiController.php';
 
         if (!$this->filesystem->exists($baseControllerPath)){
             $this->renderFile('DisideGeneratorBundle:Controller:baseApiController.php.twig', $baseControllerPath, array(
                 'namespace' => $bundle->getNamespace(),
+                'route_prefix' => $this->getEntityRoutePrefix($entity),
             ));
         }
     }

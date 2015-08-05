@@ -23,8 +23,7 @@ class Api{{ entity }}Controller extends BaseApiController
      */
     public function listAction(Request $request)
     {
-        $entities = $this->get('{{ route_prefix|lower }}_repository')->findAll();
-        return $this->createApiResponse(array('{{ (entity[:1]|lower ~ entity[1:])|pluralize }}' => $entities));
+        return $this->createListResponse($request, $this->get('{{ route_prefix|lower }}_repository'));
     }
 
     /**

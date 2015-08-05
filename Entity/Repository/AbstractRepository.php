@@ -23,6 +23,14 @@ abstract class AbstractRepository extends EntityRepository
         return $this->createQueryBuilder($this->getRootAlias());
     }
 
+    public function findAllPaginated($page = 1, $pageSize = 10)
+    {
+        $qb = $this->findAllQuery()
+            ->setMaxResults(10)
+            ->setFirstResult($pageSize * ($page -1));
+        return $qb->getQuery()->getResult();
+    }
+
     public function countAll()
     {
         $qb = $this->findAllQuery();
