@@ -38,7 +38,7 @@ Feature: User can list {{ entity_name }}
 
 {% if filters %}
     {% for field in other_fields %}
-      Scenario: I can filter {{ entity_name|pluralize }} by name
+      Scenario: I can filter {{ entity_name|pluralize }} by {{ field.name }}
         Given there are {{ entity_name|pluralize }}:
           {{ properties }}
           {{ values }}

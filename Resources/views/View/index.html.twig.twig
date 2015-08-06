@@ -43,7 +43,7 @@
             {% for field in fields %}
 
                 {% if field.type == 'date' or field.type == 'datetime' %}
-            <td class="{{ field.name }}">{{ "{{ entity." ~ field.name ~ "|date }}"}}</td>
+            <td class="{{ field.name }}">{{ "{{ entity." ~ field.name ~ "|date('m/d/Y') }}"}}</td>
                 {% else %}
             <td class="{{ field.name }}">{{ "{{ entity." ~ field.name ~ " }}"}}</td>
                 {% endif %}

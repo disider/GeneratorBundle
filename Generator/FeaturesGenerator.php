@@ -87,7 +87,7 @@ class FeaturesGenerator extends BaseGenerator
             else if ($type == 'boolean')
                 $value = false;
             else if ($type == 'date')
-                $value = '20/12/2015';
+                $value = '10/10/2015';
             else if ($type == 'datetime')
                 continue;
 

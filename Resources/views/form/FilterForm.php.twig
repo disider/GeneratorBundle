@@ -16,14 +16,14 @@ class {{ entity }}FilterForm extends BaseType
             {%- if field.type == 'date' %}
             ->add('{{ field.name }}', 'filter_date', array(
                 'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy'
-                ))
+                'format' => 'dd/MM/yyyy',
             {%- else %}
             ->add('{{ field.name }}', null, array(
             {%- endif %}
                 'label' => false,
                 'attr' => array('placeholder' => 'fields.{{ field.name }}'),
                 'apply_filter' => $this->getFilterFunction(),
+                'required' => false
             ))
     {%- endfor %}
     ;
@@ -46,10 +46,16 @@ class {{ entity }}FilterForm extends BaseType
     {
         return function (ORMQuery $queryBuilder, $expr, $field) {
             if (!empty($field['value'])) {
-                $queryBuilder->getQueryBuilder()
-                    ->andWhere($expr . ' LIKE  :value')
-                    ->setParameter('value', '%' . $field['value'] . '%');
-            }
-        };
+                $value = $field['value'];
+
+                if ($value instanceof \DateTime)
+                    $queryBuilder->getQueryBuilder()
+                        ->andWhere($expr . ' =  :value')
+                        ->setParameter('value', $value);
+                else
+                    $queryBuilder->getQueryBuilder()
+                        ->andWhere($expr . ' LIKE  :value')
+                        ->setParameter('value', '%' . $value . '%');
+        }
     }
 }
