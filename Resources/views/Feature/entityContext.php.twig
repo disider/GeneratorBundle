@@ -17,7 +17,29 @@ class {{ entity }}Context extends BaseSubContext
         $repository = $this->getContainer()->get('{{ route_prefix }}_repository');
 
         foreach ($table->getHash() as $values) {
-            $entity= new {{ entity }}();
+            $entity = $this->getEntityFromTable($values);
+            $repository->save($entity);
+        }
+    }
+
+    /**
+     * @Given /^there are (\d+) {{ entity_name|pluralize }} with:$/
+     */
+    public function thereAre{{ entity|pluralize }}With($number, TableNode $table)
+    {
+        $repository = $this->getContainer()->get('{{ entity_name }}_repository');
+
+        $values = $table->getHash()[0];
+
+        for ($i=0; $i<$number; $i++){
+            $entity = $this->getEntityFromTable($values);
+            $repository->save($entity);
+        }
+    }
+
+    protected function getEntityFromTable($values)
+    {
+        $entity= new {{ entity }}();
 
         {%- for field in fields %}
             {% set method = '' %}
@@ -39,9 +61,6 @@ class {{ entity }}Context extends BaseSubContext
         $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}', '{{ defaultValue }}'));
 
         {%- endfor %}
-
-            $repository->save($entity);
-        }
+        return $entity;
     }
-
 }

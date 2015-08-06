@@ -6,20 +6,49 @@
     {% set values = values ~ field.value  ~ ' | ' %}
 {%- endfor %}
 
+{% set other_values = '| ' %}
+{%- for other_field in other_fields %}
+    {% set other_values = other_values ~ other_field.value  ~ ' | ' %}
+{%- endfor %}
+
 Feature: User can list {{ entity_name }}
 
+{% if security %}
   Background:
+    Given I am logged as "user" and "secret"
+{% endif %}
+
+  Scenario: I see the {{ entity_name|pluralize }} list
     Given there are {{ entity_name|pluralize }}:
       {{ properties }}
       {{ values }}
       {{ values }}
-{% if security %}
-    And I am logged as "user" and "secret"
-{% endif %}
-
-  Scenario: I see the {{ entity_name|pluralize }} list
     When I visit "/{{ entity_path }}"
     Then I should see 2 "{{ entity_path|singularize }}"
     And I should see the "/{{ entity_path }}/new" link
     And I should see the "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit" link
     And I should see the "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit" link
+
+  Scenario: I see the {{ entity_name }} list paginated
+    Given there are 12 {{ entity_name|pluralize }} with:
+      {{ properties }}
+      {{ values }}
+    When I visit "/{{ entity_name|pluralize }}?page=2"
+    Then I should see 2 "{{ entity_name }}"
+
+{% if filters %}
+    {% for field in other_fields %}
+      Scenario: I can filter {{ entity_name|pluralize }} by name
+        Given there are {{ entity_name|pluralize }}:
+          {{ properties }}
+          {{ values }}
+          {{ other_values }}
+        And I am on "/{{ entity_name|pluralize }}"
+        When I fill the "{{ entity_name|pluralize }}_filter.{{ field.name }}" field with "{{ field.value }}"
+        And I press "Filter"
+        Then I should be on "/{{ entity_name|pluralize }}"
+        And I should see 1 "{{ entity_name }}"
+        And I should see "{{ field.value }}"
+
+    {% endfor %}
+{% endif %}

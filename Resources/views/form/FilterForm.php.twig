@@ -31,7 +31,7 @@ class {{ entity }}FilterForm extends BaseType
 
     public function getName()
     {
-        return 'customers_filter';
+        return '{{ route_prefix|pluralize }}_filter';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

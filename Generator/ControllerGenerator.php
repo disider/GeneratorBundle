@@ -63,6 +63,7 @@ class ControllerGenerator extends BaseGenerator
                 'namespace' => $bundle->getNamespace(),
                 'entity' => $entity,
                 'fields' => $this->getFieldsWithType($metadata),
+                'route_prefix' => $this->getEntityRoutePrefix($entity),
             ));
         }
     }

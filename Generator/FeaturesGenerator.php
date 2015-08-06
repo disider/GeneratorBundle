@@ -10,6 +10,9 @@ class FeaturesGenerator extends BaseGenerator
     /** @var bool */
     private $security;
 
+    /** @var bool */
+    private $filters;
+
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
         $parts = explode('\\', $entity);
@@ -71,6 +74,29 @@ class FeaturesGenerator extends BaseGenerator
         return $values;
     }
 
+    protected function getFieldsWithAlternativeValues(ClassMetadataInfo $metadata)
+    {
+        $fields = $this->getFieldsWithType($metadata);
+        $values = array();
+
+        foreach ($fields as $field) {
+            $type = $field['type'];
+            $value = 'OTHER_TEXT';
+            if ($type == 'integer' || $type == 'float')
+                $value = 2;
+            else if ($type == 'boolean')
+                $value = false;
+            else if ($type == 'date')
+                $value = '20/12/2015';
+            else if ($type == 'datetime')
+                continue;
+
+            $values[$field['name']] = array('name' => $field['name'], 'value' => $value);
+        }
+
+        return $values;
+    }
+
     protected function renderFeature($fileName, BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $entityClass)
     {
         $indexPath = sprintf($this->security ? '%s/Features/%s/User/%s' : '%s/Features/%s/%s',
@@ -81,9 +107,11 @@ class FeaturesGenerator extends BaseGenerator
         $this->renderFile('DisideGeneratorBundle:Feature:' . strtolower($fileName) . '.twig', $indexPath, array(
             'security' => $this->security,
             'fields' => $this->getFieldsWithDefaultValues($metadata),
+            'other_fields' => $this->getFieldsWithAlternativeValues($metadata),
             'entity_name' => $this->getEntityName($entity),
             'entity_path' => $this->getPath($entity),
             'entity' => $entityClass,
+            'filters' => $this->filters
         ));
     }
 
@@ -108,4 +136,8 @@ class FeaturesGenerator extends BaseGenerator
         $this->security = $security;
     }
 
+    public function setFilters($filters)
+    {
+        $this->filters = $filters;
+    }
 }
