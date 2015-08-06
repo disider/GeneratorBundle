@@ -14,9 +14,16 @@ class ViewsGenerator extends BaseGenerator
 {
     private $basePath;
 
+    private $filters;
+
     public function getBasePath()
     {
         return $this->basePath;
+    }
+
+    public function setFilters($filters)
+    {
+        $this->filters = $filters;
     }
 
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
@@ -25,6 +32,7 @@ class ViewsGenerator extends BaseGenerator
         $indexPath = $this->basePath . '/index.html.twig';
 
         $this->renderFile('DisideGeneratorBundle:View:index.html.twig.twig', $indexPath, array(
+            'filters' => $this->filters,
             'fields' => $this->getFieldsWithType($metadata),
             'route_prefix' => $this->getEntityRoutePrefix($entity),
             'message_prefix' => $this->getEntityRoutePrefix($entity),

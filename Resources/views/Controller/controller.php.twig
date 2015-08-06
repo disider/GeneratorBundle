@@ -12,6 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Diside\GeneratorBundle\Form\Processor\DefaultFormProcessor;
 use Diside\GeneratorBundle\Controller\BaseController;
 use {{ namespace }}\Entity\{{ entity }};
+{% if filters %}
+use {{ namespace }}\Form\{{ entity }}FilterForm;
+{% endif %}
 {% endblock use_statements %}
 
 /**
@@ -30,11 +33,20 @@ class {{ entity }}Controller extends BaseController
      * @Route(name="{{ route_prefix|pluralize }}")
      * @Template
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return array(
-            '{{ (entity[:1]|lower ~ entity[1:])|pluralize }}' => $this->get('{{ route_prefix|lower }}_repository')->findAll()
-        );
+    {% if filters %}
+        return $this->buildPaginationWithFilter(
+            $request,
+            new {{ entity }}FilterForm(),
+            $this->get('{{ route_prefix }}_repository')->findAllQuery(),
+            $this->container->getParameter('default_crud_page_size'));
+    {% else %}
+        return $this->buildPagination(
+            $request,
+            $this->get('brand_repository')->findAllQuery(),
+            $this->container->getParameter('default_crud_page_size'));
+    {% endif %}
     }
 
     /**

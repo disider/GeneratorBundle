@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
 {
+    const PARAMETERS_ADD_SECURITY = 'add-security';
+    const PARAMETERS_ADD_FILTERS = 'add-filters';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {

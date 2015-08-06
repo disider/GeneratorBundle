@@ -17,13 +17,15 @@ class GenerateCRUDCommand extends DoctrineCommand
         $this
             ->setName('diside:generate:crud')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
-            ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation');
+            ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation')
+            ->addOption('add-filters', null, InputOption::VALUE_NONE,  'Add filters to list action');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityName = $input->getArgument('entity');
         $addSecurity = $input->getOption('add-security');
+        $addFilters = $input->getOption('add-filters');
 
         $this->executeCommand(
             sprintf('app/console doctrine:generate:entities %s --path=src/ --no-backup', $entityName),
@@ -34,11 +36,11 @@ class GenerateCRUDCommand extends DoctrineCommand
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:controller %s' . ($addSecurity ? ' --add-security' : ''), $entityName),
+            sprintf('app/console diside:generate:controller %s' . ($addSecurity ? ' --add-security' : '') . ($addFilters ? ' --add-filters' : ''), $entityName),
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:views %s', $entityName),
+            sprintf('app/console diside:generate:views %s' . ($addFilters ? ' --add-filters' : ''), $entityName) ,
             $output);
     }
 

@@ -15,23 +15,29 @@ class GenerateControllerCommand extends BaseGenerateDoctrineCommand
     /** @var bool */
     private $security;
 
+    /** @var bool */
+    private $filters;
+
     protected function configure()
     {
         $this
             ->setName('diside:generate:controller')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
-            ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation');
+            ->addOption(self::PARAMETERS_ADD_SECURITY, null, InputOption::VALUE_NONE,  'Add security annotation')
+            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add list filters');
     }
 
     protected function preExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->security = $input->getOption('add-security');
+        $this->security = $input->getOption(self::PARAMETERS_ADD_SECURITY);
+        $this->filters = $input->getOption(self::PARAMETERS_ADD_FILTERS);
     }
 
     protected function createGenerator()
     {
         $controller = new ControllerGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
         $controller->setSecurity($this->security);
+        $controller->setFilters($this->filters);
 
         return $controller;
     }
