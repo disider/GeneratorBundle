@@ -15,13 +15,16 @@
 
     {% if filters %}
         <form method="get" action="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">
-            <div class="row">
-                <div class="col-sm-6">
+            <div class="well">
+                <div class="row">
+                    {%- for field in fields %}
+                        <div class="col-sm-3">{{ "{{ form_row(form." ~ field.name ~ ") }}" }}</div>
+                    {%- endfor %}
                     {{  '{{ form_rest(form) }}' }}
-                </div>
-                <div class="col-sm-6">
-                    <input class="btn btn-primary" type="submit" name="submit" value="{{ 'actions.filter'|trans }}"/>
-                    <a class="btn btn-default" href="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">{{ 'actions.reset'|trans }}</a>
+                    <div class="col-sm-3">
+                        <input class="btn btn-primary" type="submit" name="submit" value="{{ 'actions.filter'|trans }}"/>
+                        <a class="btn btn-default" href="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">{{ 'actions.reset'|trans }}</a>
+                    </div>
                 </div>
             </div>
         </form>

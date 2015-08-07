@@ -56,6 +56,7 @@ class {{ entity }}FilterForm extends BaseType
                     $queryBuilder->getQueryBuilder()
                         ->andWhere($expr . ' LIKE  :value')
                         ->setParameter('value', '%' . $value . '%');
-        }
+            }
+        };
     }
 }
