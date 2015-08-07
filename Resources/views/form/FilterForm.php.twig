@@ -2,61 +2,9 @@
 
 namespace {{ namespace }}\Form;
 
-use Lexik\Bundle\FormFilterBundle\Filter\Doctrine\ORMQuery;
-use Symfony\Component\Form\AbstractType as BaseType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use {{ namespace }}\Form\Base\Base{{ entity }}FilterForm;
 
-class {{ entity }}FilterForm extends BaseType
+class {{ entity }}FilterForm extends Base{{ entity }}FilterForm
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-        {%- for field in fields %}
-            {%- if field.type == 'date' %}
-            ->add('{{ field.name }}', 'filter_date', array(
-                'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
-            {%- else %}
-            ->add('{{ field.name }}', null, array(
-            {%- endif %}
-                'label' => false,
-                'attr' => array('placeholder' => 'fields.{{ field.name }}'),
-                'apply_filter' => $this->getFilterFunction(),
-                'required' => false
-            ))
-    {%- endfor %}
-    ;
-    }
 
-    public function getName()
-    {
-        return '{{ route_prefix|pluralize }}_filter';
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'csrf_protection'   => false,
-            'validation_groups' => array('filtering')
-        ));
-    }
-
-    private function getFilterFunction()
-    {
-        return function (ORMQuery $queryBuilder, $expr, $field) {
-            if (!empty($field['value'])) {
-                $value = $field['value'];
-
-                if ($value instanceof \DateTime)
-                    $queryBuilder->getQueryBuilder()
-                        ->andWhere($expr . ' =  :value')
-                        ->setParameter('value', $value);
-                else
-                    $queryBuilder->getQueryBuilder()
-                        ->andWhere($expr . ' LIKE  :value')
-                        ->setParameter('value', '%' . $value . '%');
-            }
-        };
-    }
 }

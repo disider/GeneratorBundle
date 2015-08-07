@@ -41,11 +41,19 @@ class ControllerGenerator extends BaseGenerator
         $className = $entity . 'Controller';
         $classPath = $bundle->getPath() . '/Controller/' . $className . '.php';
 
-        if (file_exists($classPath)) {
-            throw new \RuntimeException(sprintf('Unable to generate the %s class as it already exists under the %s file', $className, $classPath));
+        if (!$this->filesystem->exists($classPath)) {
+            $this->renderFile('DisideGeneratorBundle:Controller:controller.php.twig', $classPath, array(
+                'security' => $this->security,
+                'filters' => $this->filters,
+                'namespace' => $bundle->getNamespace(),
+                'entity' => $entity,
+                'path' => $this->getPath($entity),
+                'route_prefix' => $this->getEntityRoutePrefix($entity),
+            ));
         }
 
-        $this->renderFile('DisideGeneratorBundle:Controller:controller.php.twig', $classPath, array(
+        $baseClassPath = $bundle->getPath() . '/Controller/Base/Base' . $className . '.php';
+        $this->renderFile('DisideGeneratorBundle:Controller:baseController.php.twig', $baseClassPath, array(
             'security' => $this->security,
             'filters' => $this->filters,
             'namespace' => $bundle->getNamespace(),
@@ -58,13 +66,21 @@ class ControllerGenerator extends BaseGenerator
     protected function renderFilterForm(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
     {
         if ($this->filters) {
-            $formPath = $bundle->getPath() . '/Form/' . $entity . 'FilterForm.php';
-            $this->renderFile('DisideGeneratorBundle:Form:FilterForm.php.twig', $formPath, array(
+            $baseFormPath = $bundle->getPath() . '/Form/Base/Base' . $entity . 'FilterForm.php';
+            $this->renderFile('DisideGeneratorBundle:Form:BaseFilterForm.php.twig', $baseFormPath, array(
                 'namespace' => $bundle->getNamespace(),
                 'entity' => $entity,
                 'fields' => $this->getFieldsWithType($metadata),
                 'route_prefix' => $this->getEntityRoutePrefix($entity),
             ));
+
+            $formPath = $bundle->getPath() . '/Form/' . $entity . 'FilterForm.php';
+            if (!$this->filesystem->exists($formPath)){
+                $this->renderFile('DisideGeneratorBundle:Form:FilterForm.php.twig', $formPath, array(
+                    'namespace' => $bundle->getNamespace(),
+                    'entity' => $entity,
+                ));
+            }
         }
     }
 
