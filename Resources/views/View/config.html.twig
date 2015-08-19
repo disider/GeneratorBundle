@@ -1,0 +1,13 @@
+{% block config %}
+-> messages.en.yml:
+
+    {{ entity|lower }}:
+        title:
+            list: {{ entity }} list
+            edit: {{ entity }} edit
+            create: {{ entity }} new
+        flash:
+            created: {{ entity }} created successfully
+            updated: {{ entity }} updated successfully
+            deleted: {{ entity }} deleted successfully
+{% endblock config %}

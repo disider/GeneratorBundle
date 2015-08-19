@@ -14,6 +14,16 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('diside_generator');
 
 
+        $rootNode
+            ->children()
+                ->arrayNode('default_crud')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->integerNode('page_size')->defaultValue(10)->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

@@ -17,7 +17,7 @@ class GenerateApiFeaturesCommand extends BaseGenerateDoctrineCommand
     {
         $this
             ->setName('diside:behat:api-features-generator')
-            ->addArgument('entity', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name')
+            ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
             ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation');
     }
 

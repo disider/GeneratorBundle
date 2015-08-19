@@ -7,6 +7,7 @@ actions:
   save_and_close: Save and close
   title: Actions
   filter: Filter
+  reset: Reset
 
 fields:
   id: id

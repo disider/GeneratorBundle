@@ -25,25 +25,22 @@
         <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
     </service>
 
--> Composer:
-    "knplabs/knp-paginator-bundle": "~2.4",
-{% if filters %}
-    "lexik/form-filter-bundle": "3.*@dev"
-{% endif %}
+{#-> Composer:#}
+    {#"knplabs/knp-paginator-bundle": "~2.4",#}
+{#{% if filters %}#}
+    {#"lexik/form-filter-bundle": "3.*@dev"#}
+{#{% endif %}#}
 
--> AppKernel:
-    public function registerBundles()
-    {
-        $bundles = array(
-            ...
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-{% if filters %}
-            new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle()
-{% endif %}
-        )
-    }
-
--> Parameters:
-    default_crud_page_size: 10
+{#-> AppKernel:#}
+    {#public function registerBundles()#}
+    {#{#}
+        {#$bundles = array(#}
+            {#...#}
+            {#new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),#}
+{#{% if filters %}#}
+            {#new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle()#}
+{#{% endif %}#}
+        {#)#}
+{#}#}
 
 {% endblock config %}

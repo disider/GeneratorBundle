@@ -25,7 +25,7 @@ class Base{{ entity }}Controller extends BaseController
             $request,
             new {{ entity }}FilterForm(),
             $this->get('{{ route_prefix }}_repository')->findAllQuery(),
-            $this->container->getParameter('default_crud_page_size'));
+            $this->container->getParameter('default_crud.page_size'));
     {% else %}
         return $this->buildPagination(
             $request,

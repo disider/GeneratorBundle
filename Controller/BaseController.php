@@ -43,7 +43,7 @@ class BaseController extends Controller
         );
     }
 
-    protected function buildPagination (Request $request, $queryBuilder, $parameter)
+    protected function buildPagination(Request $request, $queryBuilder, $parameter)
     {
         $page = $request->query->get('page', 1);
         /** @var Paginator $paginator */

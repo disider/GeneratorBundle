@@ -51,6 +51,9 @@ class ViewsGenerator extends BaseGenerator
             'message_prefix' => $this->getEntityRoutePrefix($entity)
         ));
 
+        return $this->render('DisideGeneratorBundle:View:config.html.twig', array(
+            'entity' => $entity,
+        ));
     }
 
 

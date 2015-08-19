@@ -22,8 +22,8 @@
                     {%- endfor %}
                     {{  '{{ form_rest(form) }}' }}
                     <div class="col-sm-3">
-                        <input class="btn btn-primary" type="submit" name="submit" value="{{ 'actions.filter'|trans }}"/>
-                        <a class="btn btn-default" href="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">{{ 'actions.reset'|trans }}</a>
+                        <input class="btn btn-primary" type="submit" name="submit" value="{{ "{{ 'actions.filter'|trans }}" }}"/>
+                        <a class="btn btn-default" href="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">{{ "{{ 'actions.reset'|trans }}" }}</a>
                     </div>
                 </div>
             </div>

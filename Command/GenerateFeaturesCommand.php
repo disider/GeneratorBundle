@@ -20,7 +20,7 @@ class GenerateFeaturesCommand extends BaseGenerateDoctrineCommand
     {
         $this
             ->setName('diside:behat:features-generator')
-            ->addArgument('entity', InputArgument::REQUIRED, 'A bundle name, a namespace, or a class name')
+            ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
             ->addOption(self::PARAMETERS_ADD_SECURITY, null, InputOption::VALUE_NONE,  'Add security annotation')
             ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add filters');
     }
