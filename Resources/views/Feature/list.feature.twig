@@ -33,8 +33,8 @@ Feature: User can list {{ entity_name }}
     Given there are 12 {{ entity_name|pluralize }} with:
       {{ properties }}
       {{ values }}
-    When I visit "/{{ entity_name|pluralize }}?page=2"
-    Then I should see 2 "{{ entity_name }}"
+    When I visit "/{{ entity_path }}?page=2"
+    Then I should see 2 "{{ entity_path|singularize }}"
 
 {% if filters %}
     {% for field in other_fields %}
@@ -43,11 +43,11 @@ Feature: User can list {{ entity_name }}
           {{ properties }}
           {{ values }}
           {{ other_values }}
-        And I am on "/{{ entity_name|pluralize }}"
-        When I fill the "{{ entity_name|pluralize }}_filter.{{ field.name }}" field with "{{ field.value }}"
+        And I am on "/{{ entity_path }}"
+        When I fill the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field with "{{ field.value }}"
         And I press "Filter"
-        Then I should be on "/{{ entity_name|pluralize }}"
-        And I should see 1 "{{ entity_name }}"
+        Then I should be on "/{{ entity_path }}"
+        And I should see 1 "{{ entity_path|singularize }}"
         And I should see "{{ field.value }}"
 
     {% endfor %}

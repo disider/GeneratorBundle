@@ -6,7 +6,7 @@
 {% block body %}
 
 {{ "{% block main_content %}" }}
-    <h2> {{ "{{ '" ~ message_prefix ~ ".title.edit'|trans }}" }}</h2>
+    <h2> {{ "{{ 'entity.title.edit'|trans({'%entity%': '" ~ entity ~ "'}) }}" }}</h2>
 
     <form method="POST" action="{{ "{{ path('" ~ route_prefix ~ "_edit', {'id': form.vars.data.id}) }}" }}" role="form" {{ "{{ novalidate }}" }}>
         <div class="panel panel-default">

@@ -12,3 +12,13 @@ actions:
 fields:
   id: id
   name: Name
+
+entity:
+  title:
+      list: %entity% list
+      edit: %entity% edit
+      create: %entity% new
+  flash:
+      created: Entity created successfully
+      updated: Entity updated successfully
+      deleted: Entity deleted successfully

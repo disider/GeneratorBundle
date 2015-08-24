@@ -7,7 +7,7 @@
 {{ "{% block main_content %}" }}
 
     <h2>
-        {{ "{{ ('" ~ message_prefix ~ ".title.list')|trans }} " }}
+        {{ "{{ ('entity.title.list')|trans({'%entity%': '" ~ entity ~ "'}) }} " }}
 
         <a href="{{ "{{ path('" ~ route_prefix ~ "_new') }}" }}"
            class="pull-right btn btn-sm btn-primary">{{ "{{ icon('plus') }} {{ 'actions.create'|trans }}" }}</a>

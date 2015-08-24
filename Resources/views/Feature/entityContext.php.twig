@@ -27,7 +27,7 @@ class {{ entity }}Context extends BaseSubContext
      */
     public function thereAre{{ entity|pluralize }}With($number, TableNode $table)
     {
-        $repository = $this->getContainer()->get('{{ entity_name }}_repository');
+        $repository = $this->getContainer()->get('{{ route_prefix }}_repository');
 
         $values = $table->getHash()[0];
 
@@ -42,23 +42,19 @@ class {{ entity }}Context extends BaseSubContext
         $entity= new {{ entity }}();
 
         {%- for field in fields %}
-            {% set method = '' %}
-            {% set defaultValue = '' %}
             {% if field.type == 'boolean' %}
-                {% set method = 'Bool' %}
-                {% set defaultValue = false %}
+            $this->getBoolValue($values, '{{ field.name }}');
             {% elseif field.type == 'integer' %}
-                {% set method = 'Int' %}
-                {% set defaultValue = 3 %}
+            $value = $this->getIntValue($values, '{{ field.name }}', 3);
             {% elseif field.type == 'float' %}
-                {% set method = 'Float' %}
-                {% set defaultValue = 2.0 %}
+            $value = $this->getFloatValue($values, '{{ field.name }}', 2.0);
             {% elseif field.type == 'date' or field.type == 'datetime' %}
-                {% set method = 'Date' %}
-                {% set defaultValue = '10/10/2015 00:00:00' %}
+            $value = $this->getDateValue($values, '{{ field.name }}', '10/10/2015 00:00:00');
+            {% else %}
+            $value = $this->getValue($values, '{{ field.name }}');
             {% endif %}
 
-        $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($this->get{{ method }}Value($values, '{{ field.name }}', '{{ defaultValue }}'));
+        $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($value);
 
         {%- endfor %}
         return $entity;

@@ -21,13 +21,19 @@ Feature: User can edit a {{ entity_name }}
     Given I visit "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"
     When I fill the "{{ entity_path|singularize|replace('-', '_') }}" fields with:
 {% for field in fields %}
-        {{ ' | ' ~ field.name  ~ ' | '  ~ field.value ~ ' | ' }}
+    {% set value = field.value == 'true' ? 1 : field.value %}
+    {% set value = field.value == 'false' ? 0 : value %}
+
+    {{ ' | ' ~ field.name  ~ ' | '  ~ value ~ ' | ' }}
 {% endfor %}
     And I press "Save"
     Then I should be on "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"
     And I should see the "{{ entity_path|singularize|replace('-', '_') }}" fields:
 {% for field in fields %}
-    {{ ' | ' ~ field.name  ~ ' | '  ~ field.value ~ ' | ' }}
+    {% set value = field.value == 'true' ? 1 : field.value %}
+    {% set value = field.value == 'false' ? 0 : value %}
+
+    {{ ' | ' ~ field.name  ~ ' | '  ~ value ~ ' | ' }}
 {% endfor %}
     And I should see "updated successfully"
 

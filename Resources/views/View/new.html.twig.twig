@@ -6,7 +6,7 @@
 {% block body %}
 
 {{ "{% block main_content %}" }}
-    <h2> {{ "{{ '" ~ message_prefix ~ ".title.create'|trans }}" }}</h2>
+    <h2> {{ "{{ 'entity.title.create'|trans({'%entity%': '" ~ entity ~ "'}) }}" }}</h2>
 
     <form method="POST" action="{{ "{{ path('" ~ route_prefix ~ "_new') }}" }}" role="form" {{ "{{ novalidate }}" }}>
         <div class="panel panel-default">

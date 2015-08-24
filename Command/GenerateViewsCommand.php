@@ -41,10 +41,6 @@ class GenerateViewsCommand extends BaseGenerateDoctrineCommand
     {
         $output->writeln(array(
             'New view files have been created.',
-            '',
-            'Add these lines:',
-            '',
-            $outputMessage,
         ));
 
     }
