@@ -17,10 +17,14 @@ class Base{{ entity }}FilterForm extends BaseType
             ->add('{{ field.name }}', 'filter_date', array(
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
+                'label' => false,
+            {%- elseif field.type == 'boolean' %}
+            ->add('{{ field.name }}', 'filter_checkbox', array(
+                'label' => "{{ ("fields." ~ field.name)|trans }}",
             {%- else %}
             ->add('{{ field.name }}', null, array(
-            {%- endif %}
                 'label' => false,
+            {%- endif %}
                 'attr' => array('placeholder' => 'fields.{{ field.name }}'),
                 'apply_filter' => $this->getFilterFunction(),
                 'required' => false
