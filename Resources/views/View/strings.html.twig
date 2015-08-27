@@ -1,24 +1,12 @@
-{% block config %}
--> Composer:
-    "require": {
-        "jms/serializer-bundle" : "~1.0",
-        "willdurand/hateoas-bundle" : "~1.0"
-    }
+{% block strings %}
 
--> AppKernel:
-    $bundles = array(
-        new JMS\SerializerBundle\JMSSerializerBundle(),
-        new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle()
-    )
+    {{ entity|lower ~ '.title.create' }}
+    {{ entity|lower ~ '.title.edit' }}
+    {{ entity|lower ~ '.title.list' }}
 
--> Listener:
-    <service id="api_exception_listener" class="AppBundle\Listener\ApiExceptionListener">
-        <argument type="service" id="security.context"/>
-        <argument type="service" id="security.authentication.trust_resolver"/>
-        <argument>%kernel.debug%</argument>
-        <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="100"/>
-    </service>
+    {%- for field in fields %}
 
--> Prameters:
-    api_default_page_size: 10
-{% endblock config %}
+    {{ "fields." ~ field.name }}
+    {%- endfor %}
+
+{% endblock strings %}
