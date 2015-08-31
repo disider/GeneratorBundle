@@ -25,14 +25,14 @@ class Base{{ form_class }} extends AbstractType
             {%- if field.type == 'date' %}
 
             ->add('{{ field.name }}', 'date', array(
-                'label' => 'fields.{{ field.name }}',
+                'label' => 'fields.{{ field.name|to_underscore }}',
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy'
             ))
             {%- else %}
 
             ->add('{{ field.name }}', null, array(
-                'label' => 'fields.{{ field.name }}'
+                'label' => 'fields.{{ field.name|to_underscore }}'
             ))
             {%- endif %}
         {%- endfor %}

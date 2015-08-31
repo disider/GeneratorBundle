@@ -35,7 +35,7 @@
             <thead>
                 <tr>
                     {%- for field in fields %}
-                    <th>{{ "{{ 'fields." ~ field.name ~ "'|trans }}" }}</th>
+                    <th>{{ "{{ 'fields." ~ field.name|to_underscore ~ "'|trans }}" }}</th>
                     {%- endfor %}
                     <th>{{ "{{ 'actions.title'|trans }}" }}</th>
                 </tr>
