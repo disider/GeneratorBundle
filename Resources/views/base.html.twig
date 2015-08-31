@@ -27,6 +27,9 @@
             <div class="navbar-brand">
                 <a href="{{ path('homepage') }}">{{ 'app.title'|trans }}</a>
             </div>
+
+            {% block header_menu %}
+            {% endblock %}
         </div>
     </nav>
 </header>
