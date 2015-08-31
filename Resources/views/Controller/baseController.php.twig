@@ -29,7 +29,7 @@ class Base{{ entity }}Controller extends BaseController
     {% else %}
         return $this->buildPagination(
             $request,
-            $this->get('brand_repository')->findAllQuery(),
+            $this->get('{{ route_prefix }}_repository')->findAllQuery(),
             $this->container->getParameter('default_crud_page_size'));
     {% endif %}
     }
