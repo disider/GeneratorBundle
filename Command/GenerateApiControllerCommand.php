@@ -44,7 +44,7 @@ class GenerateApiControllerCommand extends BaseGenerateDoctrineCommand
             'Add these lines to your services:',
             '',
             $outputMessage,
-        ));
+        ), OutputInterface::OUTPUT_RAW);
     }
 
 }

@@ -1,0 +1,12 @@
+{% block strings %}
+
+    {{ entity|lower ~ '.title.create' }}
+    {{ entity|lower ~ '.title.edit' }}
+    {{ entity|lower ~ '.title.list' }}
+
+    {%- for field in fields %}
+
+    {{ "fields." ~ field.name }}
+    {%- endfor %}
+
+{% endblock strings %}

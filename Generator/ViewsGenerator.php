@@ -49,6 +49,11 @@ class ViewsGenerator extends BaseGenerator
             'route_prefix' => $this->getEntityRoutePrefix($entity),
             'entity' => $entity,
         ));
+
+        return $this->render('DisideGeneratorBundle:View:strings.html.twig', array(
+            'fields' => $this->getFieldsWithType($metadata),
+            'entity' => $entity,
+        ));
     }
 
 

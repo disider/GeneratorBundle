@@ -41,6 +41,10 @@ class GenerateViewsCommand extends BaseGenerateDoctrineCommand
     {
         $output->writeln(array(
             'New view files have been created.',
+            '',
+            'Add these keys to your translation files:',
+            '',
+            $outputMessage
         ));
 
     }
