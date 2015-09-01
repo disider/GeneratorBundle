@@ -24,19 +24,17 @@ class FeaturesGenerator extends BaseGenerator
         $parts = explode('\\', $entity);
         array_pop($parts);
 
-        if (file_exists($classPath)) {
-            throw new \RuntimeException(sprintf('Unable to generate the %s class, it already exists', $classPath));
+        if (!$this->filesystem->exists($classPath)) {
+            $this->renderFile('DisideGeneratorBundle:Feature:EntityContext.php.twig', $classPath, array(
+                'fields' => $this->getFieldsWithType($metadata),
+                'namespace' => $bundle->getNamespace(),
+                'entity_namespace' => implode('\\', $parts),
+                'entity_name' => $this->getEntityName($entity),
+                'entity' => $entityClass,
+                'bundle' => $bundle->getName(),
+                'route_prefix' => $this->getEntityRoutePrefix($entity),
+            ));
         }
-
-        $this->renderFile('DisideGeneratorBundle:Feature:EntityContext.php.twig', $classPath, array(
-            'fields' => $this->getFieldsWithType($metadata),
-            'namespace' => $bundle->getNamespace(),
-            'entity_namespace' => implode('\\', $parts),
-            'entity_name' => $this->getEntityName($entity),
-            'entity' => $entityClass,
-            'bundle' => $bundle->getName(),
-            'route_prefix' => $this->getEntityRoutePrefix($entity),
-        ));
 
         $this->renderDenyActions($bundle, $entity, $metadata, $entityClass);
         $this->renderFeature('Delete.feature', $bundle, $entity, $metadata, $entityClass);
@@ -68,7 +66,7 @@ class FeaturesGenerator extends BaseGenerator
             else if ($type == 'datetime')
                 continue;
 
-            $values[$field['name']] = array('name' => $field['name'], 'value' => $value);
+            $values[$field['name']] = array('name' => $field['name'], 'value' => $value, 'type' => $type);
         }
 
         return $values;
@@ -91,7 +89,7 @@ class FeaturesGenerator extends BaseGenerator
             else if ($type == 'datetime')
                 continue;
 
-            $values[$field['name']] = array('name' => $field['name'], 'value' => $value);
+            $values[$field['name']] = array('name' => $field['name'], 'value' => $value, 'type' => $type);
         }
 
         return $values;

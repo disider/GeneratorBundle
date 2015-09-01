@@ -43,7 +43,7 @@ class {{ entity }}Context extends BaseSubContext
 
         {%- for field in fields %}
             {% if field.type == 'boolean' %}
-            $this->getBoolValue($values, '{{ field.name }}');
+            $value = $this->getBoolValue($values, '{{ field.name }}');
             {% elseif field.type == 'integer' %}
             $value = $this->getIntValue($values, '{{ field.name }}', 3);
             {% elseif field.type == 'float' %}

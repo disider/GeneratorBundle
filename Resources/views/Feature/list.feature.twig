@@ -44,11 +44,17 @@ Feature: User can list {{ entity_name }}
           {{ values }}
           {{ other_values }}
         And I am on "/{{ entity_path }}"
-        When I fill the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field with "{{ field.value }}"
+        {% if field.type == 'boolean' %}
+            When I check the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field
+        {% else %}
+            When I fill the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field with "{{ field.value }}"
+        {% endif %}
         And I press "Filter"
         Then I should be on "/{{ entity_path }}"
         And I should see 1 "{{ entity_path|singularize }}"
-        And I should see "{{ field.value }}"
+        {% if field.type != 'boolean' %}
+            And I should see "{{ field.value }}"
+        {% endif %}
 
     {% endfor %}
 {% endif %}
