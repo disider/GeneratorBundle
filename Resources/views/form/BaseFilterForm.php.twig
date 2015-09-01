@@ -46,7 +46,7 @@ class Base{{ entity }}FilterForm extends BaseType
         ));
     }
 
-    private function getFilterFunction()
+    protected function getFilterFunction()
     {
         return function (ORMQuery $queryBuilder, $expr, $field) {
             if (!empty($field['value'])) {
