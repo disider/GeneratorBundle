@@ -13,10 +13,10 @@ class Base{{ entity }}FilterForm extends BaseType
     {
         $builder
         {%- for field in fields %}
-            {%- if field.type == 'date' %}
+            {%- if field.type == 'date' or field.type == 'datetime' %}
             ->add('{{ field.name }}', 'filter_date', array(
                 'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
+                'format' => 'yyyy/MM/dd',
                 'label' => false,
             {%- elseif field.type == 'boolean' %}
             ->add('{{ field.name }}', 'filter_checkbox', array(

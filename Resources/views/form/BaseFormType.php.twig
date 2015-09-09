@@ -22,12 +22,12 @@ class Base{{ form_class }} extends AbstractType
     {
         $builder
         {%- for field in fields %}
-            {%- if field.type == 'date' %}
+            {%- if field.type == 'date' or field.type == 'datetime'%}
 
             ->add('{{ field.name }}', 'date', array(
                 'label' => 'fields.{{ field.name|to_underscore }}',
                 'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy'
+                'format' => 'yyyy/MM/dd'
             ))
             {%- else %}
 
