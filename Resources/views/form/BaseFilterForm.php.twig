@@ -5,7 +5,7 @@ namespace {{ namespace }}\Form\Base;
 use Lexik\Bundle\FormFilterBundle\Filter\Doctrine\ORMQuery;
 use Symfony\Component\Form\AbstractType as BaseType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Base{{ entity }}FilterForm extends BaseType
 {
@@ -38,7 +38,7 @@ class Base{{ entity }}FilterForm extends BaseType
         return '{{ route_prefix|pluralize }}_filter';
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
