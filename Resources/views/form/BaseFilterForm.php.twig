@@ -20,12 +20,12 @@ class Base{{ entity }}FilterForm extends BaseType
                 'label' => false,
             {%- elseif field.type == 'boolean' %}
             ->add('{{ field.name }}', 'filter_checkbox', array(
-                'label' => "{{ ("fields." ~ field.name|to_underscore)|trans }}",
+                'label' => "{{ ("fields." ~ field.name|to_underscore) }}",
             {%- else %}
             ->add('{{ field.name }}', null, array(
                 'label' => false,
             {%- endif %}
-                'attr' => array('placeholder' => 'fields.{{ field.name }}'),
+                'attr' => array('placeholder' => 'fields.{{ field.name|to_underscore }}'),
                 'apply_filter' => $this->getFilterFunction(),
                 'required' => false
             ))
