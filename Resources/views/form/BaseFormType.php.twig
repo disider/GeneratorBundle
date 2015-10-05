@@ -5,7 +5,7 @@ namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : ''
 {% block use_statements %}
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 {% endblock use_statements %}
 
 {% block class_definition %}
@@ -22,12 +22,12 @@ class Base{{ form_class }} extends AbstractType
     {
         $builder
         {%- for field in fields %}
-            {%- if field.type == 'date' %}
+            {%- if field.type == 'date' or field.type == 'datetime'%}
 
             ->add('{{ field.name }}', 'date', array(
                 'label' => 'fields.{{ field.name|to_underscore }}',
                 'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy'
+                'format' => 'yyyy/MM/dd'
             ))
             {%- else %}
 
@@ -42,10 +42,7 @@ class Base{{ form_class }} extends AbstractType
     }
     {% endif %}
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}'
