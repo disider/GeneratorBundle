@@ -34,6 +34,7 @@ class GenerateFeaturesCommand extends BaseGenerateDoctrineCommand
     protected function createGenerator()
     {
         $controller = new FeaturesGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
+
         $controller->setSecurity($this->security);
         $controller->setFilters($this->filters);
 

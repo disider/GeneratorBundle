@@ -6,6 +6,7 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
 {
@@ -14,6 +15,9 @@ abstract class BaseGenerateDoctrineCommand extends GenerateDoctrineCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->getContainer()->enterScope('request');
+        $this->getContainer()->set('request', new Request(), 'request');
+
         $this->preExecute($input, $output);
 
         $entity = Validators::validateEntityName($input->getArgument('entity'));

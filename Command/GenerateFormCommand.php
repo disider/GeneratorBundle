@@ -5,6 +5,7 @@ namespace Diside\GeneratorBundle\Command;
 use Diside\GeneratorBundle\Generator\FormGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class GenerateFormCommand extends BaseGenerateDoctrineCommand
 {

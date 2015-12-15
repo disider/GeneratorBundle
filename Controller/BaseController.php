@@ -29,9 +29,10 @@ class BaseController extends Controller
 
     protected function buildPaginationWithFilter(Request $request, AbstractType $type, $queryBuilder, $parameter)
     {
-        $form = $this->get('form.factory')->create($type);
-        if ($this->get('request')->query->has($form->getName())) {
-            $form->submit($this->get('request')->query->get($form->getName()));
+        $form = $this->createForm($type);
+
+        if ($request->query->has($form->getName())) {
+            $form->submit($request->query->get($form->getName()));
         }
 
         $lexik = $this->get('lexik_form_filter.query_builder_updater');
