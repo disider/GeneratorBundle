@@ -55,4 +55,19 @@ abstract class AbstractRepository extends EntityRepository
         $em->flush();
     }
 
+    public function persist($object)
+    {
+        $em = $this->getEntityManager();
+        $em->persist($object);
+
+        return $object;
+    }
+
+    public function flush($object = null)
+    {
+        $em = $this->getEntityManager();
+        $em->flush($object);
+
+        return $object;
+    }
 }
