@@ -34,7 +34,7 @@
         "symfony/form": "~2.3",
 
         "braincrafted/bootstrap-bundle": "~2.0",
-        "twbs/bootstrap": "3.2.*",
+        "twbs/bootstrap": "~3.2",
         "knplabs/knp-menu-bundle": "~2.0",
         "knplabs/knp-paginator-bundle": "~2.4",
         "knplabs/doctrine-behaviors": "1.0.*@dev",
