@@ -48,11 +48,14 @@ abstract class AbstractRepository extends EntityRepository
         return $object;
     }
 
-    public function delete($object)
+    public function delete($object, $flush = true)
     {
         $em = $this->getEntityManager();
         $em->remove($object);
-        $em->flush();
+
+        if ($flush){
+            $em->flush();
+        }
     }
 
     public function persist($object)
