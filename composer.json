@@ -39,7 +39,7 @@
         "knplabs/knp-paginator-bundle": "~2.4",
         "knplabs/doctrine-behaviors": "1.0.*@dev",
         "jquery/jquery": "1.11.*",
-        "jms/i18n-routing-bundle": "dev-master",
+        "jms/i18n-routing-bundle": "~2.0.0",
         "stof/doctrine-extensions-bundle": "1.2.*@dev",
         "hautelook/alice-bundle": "0.2.*",
         "webfactory/exceptions-bundle": "~4.0",
