@@ -1,5 +1,5 @@
 {
-    "sname": "diside/generator-bundle",
+    "name": "diside/generator-bundle",
     "description": "Symfony GeneratorBundle",
     "keywords": ["generator"],
     "type": "symfony-bundle",
