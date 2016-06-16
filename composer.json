@@ -12,7 +12,11 @@
     ],
     "require": {
         "php": ">=5.3.9",
+<<<<<<< HEAD
         "symfony/symfony": "2.8.*"
+=======
+        "symfony/symfony": "2.8.*",
+>>>>>>> b6d7db9573dfc1712de848f6c963074ab47d1e53
     },
     "autoload": {
         "psr-0": { "Diside\\GeneratorBundle": "" }
