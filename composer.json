@@ -11,8 +11,15 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
-        "symfony/symfony": "2.8.*"
+        "symfony/framework-bundle": "~2.7|~3.0",
+        "symfony/console": "~2.7|~3.0",
+        "symfony/process": "~2.7|~3.0",
+        "symfony/yaml": "~2.7|~3.0"
+    },
+    "require-dev": {
+        "symfony/doctrine-bridge": "~2.7|~3.0",
+        "doctrine/orm": "~2.4",
+        "twig/twig": "~1.18"
     },
     "autoload": {
         "psr-0": { "Diside\\GeneratorBundle": "" }
