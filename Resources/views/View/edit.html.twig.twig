@@ -1,14 +1,14 @@
 {% autoescape false %}
 {% block extends %}
-{{ "{% extends 'DisideGeneratorBundle::two-columns.html.twig' %}" }}
+{{ "{% extends '::two-columns.html.twig' %}" }}
 {% endblock extends %}
 
 {% block body %}
 
 {{ "{% block main_content %}" }}
-    <h2> {{ "{{ 'entity.title.edit'|trans({'%entity%': '" ~ entity ~ "'}) }}" }}</h2>
+    <h2> {{ "{{ '" ~ entity_prefix ~ ".title.edit'|trans }}" }}</h2>
 
-    <form method="POST" action="{{ "{{ path('" ~ route_prefix ~ "_edit', {'id': form.vars.data.id}) }}" }}" role="form" {{ "{{ novalidate }}" }}>
+    <form method="POST" action="{{ "{{ path('" ~ entity_prefix ~ "_edit', {'id': form.vars.data.id}) }}" }}" role="form" {{ "{{ novalidate }}" }}>
         <div class="panel panel-default">
             <div class="panel-body">
                 {{ "{{ form(form) }}" }}

@@ -2,9 +2,69 @@
 
 namespace {{ namespace }}\Form;
 
-use {{ namespace }}\Form\Base\Base{{ entity }}FilterForm;
+use Lexik\Bundle\FormFilterBundle\Filter\Doctrine\ORMQuery;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class {{ entity }}FilterForm extends Base{{ entity }}FilterForm
+class {{ entity }}FilterForm extends AbstractType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+        {%- for field in fields %}
+            {%- if field.type == 'date' or field.type == 'datetime' %}
 
+            ->add('{{ field.name }}', 'filter_date', array(
+                'widget' => 'single_text',
+                'format' => 'yyyy/MM/dd',
+                'label' => false,
+            {%- elseif field.type == 'boolean' %}
+
+            ->add('{{ field.name }}', 'filter_checkbox', array(
+                'label' => "{{ ("fields." ~ field.name|to_underscore) }}",
+            {%- else %}
+
+            ->add('{{ field.name }}', null, array(
+                'label' => false,
+            {%- endif %}
+
+                'attr' => array('placeholder' => 'fields.{{ field.name|to_underscore }}'),
+                'apply_filter' => $this->getFilterFunction(),
+                'required' => false
+            ))
+    {% endfor %}
+;
+    }
+
+    public function getName()
+    {
+        return '{{ route_prefix|pluralize }}_filter';
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection'   => false,
+            'validation_groups' => array('filtering')
+        ));
+    }
+
+    protected function getFilterFunction()
+    {
+        return function (ORMQuery $queryBuilder, $expr, $field) {
+            if (!empty($field['value'])) {
+                $value = $field['value'];
+
+                if ($value instanceof \DateTime)
+                    $queryBuilder->getQueryBuilder()
+                        ->andWhere($expr . ' =  :value')
+                        ->setParameter('value', $value);
+                else
+                    $queryBuilder->getQueryBuilder()
+                        ->andWhere($expr . ' LIKE  :value')
+                        ->setParameter('value', '%' . $value . '%');
+            }
+        };
+    }
 }

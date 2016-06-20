@@ -1,12 +1,24 @@
 {% block strings %}
+{% set entityName = entity_prefix|capitalize|replace('_', ' ') %}
 
-    {{ entity|lower ~ '.title.create' }}
-    {{ entity|lower ~ '.title.edit' }}
-    {{ entity|lower ~ '.title.list' }}
+-> messages.en.yml:
+
+    {{ entity_prefix ~ ':'}}
+        {{ 'title:'}}
+            {{ 'create: Create ' ~ entityName }}
+            {{ 'edit: Edit ' ~ entityName }}
+            {{ 'list: List ' ~ entityName }}
 
     {%- for field in fields %}
 
-    {{ "fields." ~ field.name }}
+    {{ 'fields.' ~ field.name ~ ': ' ~ entityName }}
     {%- endfor %}
 
 {% endblock strings %}
+
+{#actions.filter#}
+{#actions.reset#}
+{#actions.title#}
+{#actions.new#}
+{#actions.save#}
+{#actions.save_and_close#}

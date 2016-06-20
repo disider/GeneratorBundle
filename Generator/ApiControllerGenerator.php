@@ -16,7 +16,7 @@ class ApiControllerGenerator extends BaseGenerator
         $this->security = $value;
     }
 
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false)
     {
         $this->generateEntityController($bundle, $entity, $metadata);
         $this->generateBaseController($bundle, $entity);

@@ -5,7 +5,6 @@
     {% set properties = properties ~ field.name  ~ ' | ' %}
     {% set values = values ~ field.value  ~ ' | ' %}
 {%- endfor %}
-
 {% set other_values = '| ' %}
 {%- for other_field in other_fields %}
     {% set other_values = other_values ~ other_field.value  ~ ' | ' %}
@@ -35,26 +34,30 @@ Feature: User can list {{ entity_name }}
       {{ values }}
     When I visit "/{{ entity_path }}?page=2"
     Then I should see 2 "{{ entity_path|singularize }}"
-
 {% if filters %}
-    {% for field in other_fields %}
-      Scenario: I can filter {{ entity_name|pluralize }} by {{ field.name }}
-        Given there are {{ entity_name|pluralize }}:
-          {{ properties }}
-          {{ values }}
-          {{ other_values }}
-        And I am on "/{{ entity_path }}"
-        {% if field.type == 'boolean' %}
-            When I check the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field
-        {% else %}
-            When I fill the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field with "{{ field.value }}"
-        {% endif %}
-        And I press "Filter"
-        Then I should be on "/{{ entity_path }}"
-        And I should see 1 "{{ entity_path|singularize }}"
-        {% if field.type != 'boolean' %}
-            And I should see "{{ field.value }}"
-        {% endif %}
+    {%- for field in other_fields %}
+
+  Scenario: I can filter {{ entity_name|pluralize }} by {{ field.name }}
+    Given there are {{ entity_name|pluralize }}:
+      {{ properties }}
+      {{ values }}
+      {{ other_values }}
+    And I am on "/{{ entity_path }}"
+    {%- if field.type == 'boolean' %}
+
+    When I check the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field
+    {%- else %}
+
+    When I fill the "{{ entity_path|replace('-', '_') }}_filter.{{ field.name }}" field with "{{ field.value }}"
+    {%- endif %}
+
+    And I press "Filter"
+    Then I should be on "/{{ entity_path }}"
+    And I should see 1 "{{ entity_path|singularize }}"
+    {%- if field.type != 'boolean' %}
+
+    And I should see "{{ field.value }}"
+    {%- endif %}
 
     {% endfor %}
 {% endif %}

@@ -20,9 +20,7 @@ abstract class BaseGenerator extends Generator
         $this->twigEngine = $twigEngine;
     }
 
-
-    abstract public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata);
-
+    abstract public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false);
 
     protected function getTwigEnvironment()
     {
@@ -48,7 +46,7 @@ abstract class BaseGenerator extends Generator
 
     protected function getFieldsFromMetadata(ClassMetadataInfo $metadata)
     {
-        $fields = (array) $metadata->fieldNames;
+        $fields = (array)$metadata->fieldNames;
 
         // Remove the primary key field if it's not managed manually
         if (!$metadata->isIdentifierNatural()) {

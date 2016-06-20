@@ -1,20 +1,20 @@
 {% autoescape false %}
 {% block extends %}
-    {{ "{% extends 'DisideGeneratorBundle::two-columns.html.twig' %}" }}
+    {{ "{% extends '::two-columns.html.twig' %}" }}
 {% endblock extends %}
 
 {% block body %}
 {{ "{% block main_content %}" }}
 
     <h2>
-        {{ "{{ ('entity.title.list')|trans({'%entity%': '" ~ entity ~ "'}) }} " }}
+        {{ "{{ ('" ~ entity_prefix ~ ".title.list')|trans }} " }}
 
-        <a href="{{ "{{ path('" ~ route_prefix ~ "_new') }}" }}"
+        <a href="{{ "{{ path('" ~ entity_prefix ~ "_new') }}" }}"
            class="pull-right btn btn-sm btn-primary">{{ "{{ icon('plus') }} {{ 'actions.create'|trans }}" }}</a>
     </h2>
 
     {% if filters %}
-        <form method="get" action="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">
+        <form method="get" action="{{ "{{ path('" ~ entity_prefix|pluralize ~ "') }}" }}">
             <div class="well">
                 <div class="row">
                     {%- for field in fields %}
@@ -23,7 +23,7 @@
                     {{  '{{ form_rest(form) }}' }}
                     <div class="col-sm-3">
                         <input class="btn btn-primary" type="submit" name="submit" value="{{ "{{ 'actions.filter'|trans }}" }}"/>
-                        <a class="btn btn-default" href="{{ "{{ path('" ~ route_prefix|pluralize ~ "') }}" }}">{{ "{{ 'actions.reset'|trans }}" }}</a>
+                        <a class="btn btn-default" href="{{ "{{ path('" ~ entity_prefix|pluralize ~ "') }}" }}">{{ "{{ 'actions.reset'|trans }}" }}</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             </thead>
             <tbody>
                 {{ " {% for entity in pagination %}" }}
-                <tr class="{{ route_prefix|replace('_', '-') }}">
+                <tr class="{{ entity_prefix|replace('_', '-') }}">
             {% for field in fields %}
 
                 {% if field.type == 'date' or field.type == 'datetime' %}
@@ -53,9 +53,9 @@
             {% endfor %}
             <td class="text-center">
                         <a class="btn btn-sm btn-default"
-                           href="{{ "{{ path('"~route_prefix ~ "_edit', {'id': entity.id }) }}" }}">{{ "{{ icon('pencil') }}" }}</a>
+                           href="{{ "{{ path('" ~ entity_prefix ~ "_edit', {'id': entity.id }) }}" }}">{{ "{{ icon('pencil') }}" }}</a>
                         <a class="btn btn-sm btn-danger"
-                           href="{{ "{{ path('"~route_prefix ~ "_delete', {'id': entity.id }) }}" }}">{{ "{{ icon('trash') }}" }}</a>
+                           href="{{ "{{ path('" ~ entity_prefix ~ "_delete', {'id': entity.id }) }}" }}">{{ "{{ icon('trash') }}" }}</a>
                     </td>
                 </tr>
                 {{ "{% endfor %}" }}

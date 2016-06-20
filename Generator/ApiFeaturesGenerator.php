@@ -10,7 +10,7 @@ class ApiFeaturesGenerator extends BaseGenerator
     /** @var bool */
     private $security;
 
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false)
     {
         $parts = explode('\\', $entity);
         $entityClass = array_pop($parts);

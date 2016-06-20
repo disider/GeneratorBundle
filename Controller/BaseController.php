@@ -2,7 +2,7 @@
 
 namespace Diside\GeneratorBundle\Controller;
 
-use Knp\Component\Pager\Paginator;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,36 +27,38 @@ class BaseController extends Controller
         );
     }
 
-    protected function buildPaginationWithFilter(Request $request, AbstractType $type, $queryBuilder, $parameter)
+    protected function buildFilterForm(Request $request, QueryBuilder $queryBuilder, AbstractType $filterForm)
     {
-        $form = $this->createForm($type);
+        $filterForm = $this->createForm($filterForm);
 
-        if ($request->query->has($form->getName())) {
-            $form->submit($request->query->get($form->getName()));
+        if ($request->query->has($filterForm->getName())) {
+            $filterForm->submit($request->query->get($filterForm->getName()));
+
+            $lexik = $this->get('lexik_form_filter.query_builder_updater');
+            $lexik->addFilterConditions($filterForm, $queryBuilder);
         }
 
-        $lexik = $this->get('lexik_form_filter.query_builder_updater');
-        $lexik->addFilterConditions($form, $queryBuilder);
-
-        return array_merge(
-            array('form' => $form->createView()),
-            $this->buildPagination($request, $queryBuilder, $parameter)
-        );
+        return $filterForm;
     }
 
-    protected function buildPagination(Request $request, $queryBuilder, $parameter)
+    protected function paginate($query, $page, $pageSize, $sortField = '', $sortDirection = 'asc')
     {
-        $page = $request->query->get('page', 1);
-        /** @var Paginator $paginator */
         $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $queryBuilder,
-            $page,
-            $parameter
-        );
 
-        return array(
-            'pagination' => $pagination
+        if (in_array($this->getParameter('kernel.environment'), array('prod', 'dev'))) {
+            $options = array(
+                'defaultSortFieldName' => $sortField,
+                'defaultSortDirection' => $sortDirection
+            );
+        } else {
+            $options = array();
+        }
+
+        return $paginator->paginate(
+            $query,
+            $page,
+            $pageSize,
+            $options
         );
     }
 }

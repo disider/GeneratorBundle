@@ -18,7 +18,10 @@ class GenerateCRUDCommand extends DoctrineCommand
             ->setName('diside:generate:crud')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
             ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation')
-            ->addOption('add-filters', null, InputOption::VALUE_NONE,  'Add filters to list action');
+            ->addOption('add-filters', null, InputOption::VALUE_NONE,  'Add filters to list action')
+            ->addOption('force', 'f', InputOption::VALUE_NONE,
+                'Cause the regeneration classes');
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -26,17 +29,22 @@ class GenerateCRUDCommand extends DoctrineCommand
         $entityName = $input->getArgument('entity');
         $addSecurity = $input->getOption('add-security');
         $addFilters = $input->getOption('add-filters');
+        $force = $input->getOption('force');
 
         $this->executeCommand(
             sprintf('app/console doctrine:generate:entities %s --path=src/ --no-backup', $entityName),
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:form %s', $entityName),
+            sprintf('app/console diside:generate:form %s' . ($force ? ' --force' : ''), $entityName),
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:controller %s' . ($addSecurity ? ' --add-security' : '') . ($addFilters ? ' --add-filters' : ''), $entityName),
+            sprintf('app/console diside:generate:form %s' . ($force ? ' --force' : '') . ($addFilters ? ' --filter' : ''), $entityName),
+            $output);
+
+        $this->executeCommand(
+            sprintf('app/console diside:generate:controller %s' . ($force ? ' --force' : '') . ($addSecurity ? ' --add-security' : '') . ($addFilters ? ' --add-filters' : ''), $entityName),
             $output);
 
         $this->executeCommand(

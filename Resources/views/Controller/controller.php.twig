@@ -3,13 +3,16 @@
 namespace {{ namespace }}\Controller;
 
 {% block use_statements %}
-use {{ namespace }}\Controller\Base\Base{{ entity }}Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+{% if filters %}
+use {{ namespace }}\Form\{{ entity }}FilterForm;
+{% endif %}
 {% if security %}
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 {% endif %}
+use {{ namespace }}\Form\Processor\DefaultFormProcessor;
 use {{ namespace }}\Entity\{{ entity }};
 {% endblock use_statements %}
 
@@ -20,7 +23,7 @@ use {{ namespace }}\Entity\{{ entity }};
 {% endif %}
  */
 {% block class_definition %}
-class {{ entity }}Controller extends Base{{ entity }}Controller
+class {{ entity }}Controller extends BaseController
 {% endblock class_definition %}
 {
 {% block class_body %}
@@ -31,33 +34,76 @@ class {{ entity }}Controller extends Base{{ entity }}Controller
      */
     public function indexAction(Request $request)
     {
-        return parent::indexAction($request);
+        $page = $request->get('page', 1);
+        $pageSize = $this->container->getParameter('page_size');
+
+        $query = $this->get('{{ route_prefix }}_repository')->findAllQuery();
+        {% if filters %}
+
+        $filterForm = $this->buildFilterForm($request, $query, new {{ entity }}FilterForm());
+        {% endif %}
+
+        $pagination = $this->paginate($query, $page, $pageSize);
+
+        return array(
+            'pagination' => $pagination,
+        {%- if filters %}
+
+        'filterForm' => $filterForm->createView(),
+        {%- endif %}
+
+        );
     }
 
     /**
-    * @Route("/new", name="{{ route_prefix }}_new")
-    * @Template
-    */
+     * @Route("/new", name="{{ route_prefix }}_new")
+     * @Template
+     */
     public function newAction(Request $request)
     {
-        return parent::newAction($request);
+        return $this->processForm($request, new {{ entity }}());
     }
 
     /**
-    * @Route("/{id}/edit", name="{{ route_prefix }}_edit")
-    * @Template
-    */
+     * @Route("/{id}/edit", name="{{ route_prefix }}_edit")
+     * @Template
+     */
     public function editAction(Request $request, {{ entity }} $entity)
     {
-         return parent::editAction($request, $entity);
+        return $this->processForm($request, $entity);
     }
 
     /**
-    * @Route("/{id}/delete", name="{{ route_prefix }}_delete")
-    */
-    public function deleteAction({{ entity }} $behaviorRule)
+     * @Route("/{id}/delete", name="{{ route_prefix }}_delete")
+     */
+    public function deleteAction({{ entity }} $entity)
     {
-        return parent::deleteAction($behaviorRule);
+        $this->get('{{ route_prefix|lower }}_repository')->delete($entity);
+        $this->addFlash('success', 'entity.flash.deleted');
+
+        return $this->redirectToRoute('{{ route_prefix|pluralize }}');
+    }
+
+    protected function processForm(Request $request, {{ entity }} $entity = null)
+    {
+        $processor = $this->get('{{ route_prefix }}_form_processor');
+
+        $processor->process($request, $entity);
+
+        if ($processor->isValid()) {
+            $this->addFlash('success', $processor->isNew() ? 'entity.flash.created' : 'entity.flash.updated');
+
+            if($processor->isRedirectingTo(DefaultFormProcessor::REDIRECT_TO_LIST))
+                return $this->redirectToRoute('{{ route_prefix|pluralize }}');
+
+            return $this->redirectToRoute('{{ route_prefix }}_edit', array('id' => $processor->getData()->getId()));
+        }
+
+        $form = $processor->getForm();
+
+        return array(
+            'form' => $form->createView()
+        );
     }
 
 {% endblock class_body %}

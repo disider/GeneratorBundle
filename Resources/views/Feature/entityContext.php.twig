@@ -5,7 +5,7 @@ namespace {{ namespace }}\Features\Context;
 use Behat\Gherkin\Node\TableNode;
 use {{ namespace }}\Entity\{{ entity }};
 
-class {{ entity }}Context extends BaseSubContext
+class {{ entity }}Context extends BaseMinkContext
 {
 
     /**
@@ -42,21 +42,27 @@ class {{ entity }}Context extends BaseSubContext
         $entity= new {{ entity }}();
 
         {%- for field in fields %}
-            {% if field.type == 'boolean' %}
-            $value = $this->getBoolValue($values, '{{ field.name }}');
-            {% elseif field.type == 'integer' %}
-            $value = $this->getIntValue($values, '{{ field.name }}', 3);
-            {% elseif field.type == 'float' %}
-            $value = $this->getFloatValue($values, '{{ field.name }}', 2.0);
-            {% elseif field.type == 'date' or field.type == 'datetime' %}
-            $value = $this->getDateValue($values, '{{ field.name }}', '10/10/2015 00:00:00');
-            {% else %}
-            $value = $this->getValue($values, '{{ field.name }}');
-            {% endif %}
+            {%- if field.type == 'boolean' %}
+
+        $value = $this->getBoolValue($values, '{{ field.name }}');
+            {%- elseif field.type == 'integer' %}
+
+        $value = $this->getIntValue($values, '{{ field.name }}', 3);
+            {%- elseif field.type == 'float' %}
+
+        $value = $this->getFloatValue($values, '{{ field.name }}', 2.0);
+           {%- elseif field.type == 'date' or field.type == 'datetime' %}
+
+        $value = $this->getDateValue($values, '{{ field.name }}', '10/10/2015 00:00:00');
+            {%- else %}
+
+        $value = $this->getValue($values, '{{ field.name }}');
+            {%- endif %}
 
         $entity->set{{ field.name[:1]|capitalize ~ field.name[1:] }}($value);
 
         {%- endfor %}
+
         return $entity;
     }
 }

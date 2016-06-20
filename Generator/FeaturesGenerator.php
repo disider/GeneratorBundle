@@ -13,7 +13,7 @@ class FeaturesGenerator extends BaseGenerator
     /** @var bool */
     private $filters;
 
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false)
     {
         $parts = explode('\\', $entity);
         $entityClass = array_pop($parts);
@@ -25,7 +25,7 @@ class FeaturesGenerator extends BaseGenerator
         array_pop($parts);
 
 
-        if (!$this->filesystem->exists($classPath)) {
+        if (!$this->filesystem->exists($classPath) || $force) {
             $this->renderFile('DisideGeneratorBundle:Feature:EntityContext.php.twig', $classPath, array(
                 'fields' => $this->getFieldsWithType($metadata),
                 'namespace' => $bundle->getNamespace(),
@@ -35,19 +35,18 @@ class FeaturesGenerator extends BaseGenerator
                 'bundle' => $bundle->getName(),
                 'route_prefix' => $this->getEntityRoutePrefix($entity),
             ));
+
+            $this->renderDenyActions($bundle, $entity, $metadata, $entityClass);
+            $this->renderFeature('Delete.feature', $bundle, $entity, $metadata, $entityClass);
+            $this->renderFeature('List.feature', $bundle, $entity, $metadata, $entityClass);
+            $this->renderFeature('Create.feature', $bundle, $entity, $metadata, $entityClass);
+            $this->renderFeature('Edit.feature', $bundle, $entity, $metadata, $entityClass);
+
+            return $this->render('DisideGeneratorBundle:Feature:config.html.twig', array(
+                'entity' => $entity,
+                'route_prefix' => $this->getEntityRoutePrefix($entity),
+            ));
         }
-
-        $this->renderDenyActions($bundle, $entity, $metadata, $entityClass);
-        $this->renderFeature('Delete.feature', $bundle, $entity, $metadata, $entityClass);
-        $this->renderFeature('List.feature', $bundle, $entity, $metadata, $entityClass);
-        $this->renderFeature('Create.feature', $bundle, $entity, $metadata, $entityClass);
-        $this->renderFeature('Edit.feature', $bundle, $entity, $metadata, $entityClass);
-
-        return $this->render('DisideGeneratorBundle:Feature:config.html.twig', array(
-            'entity' => $entity,
-            'route_prefix' => $this->getEntityRoutePrefix($entity),
-        ));
-
     }
 
     protected function getFieldsWithDefaultValues(ClassMetadataInfo $metadata)
@@ -55,9 +54,10 @@ class FeaturesGenerator extends BaseGenerator
         $fields = $this->getFieldsWithType($metadata);
         $values = array();
 
-        foreach ($fields as $field) {
+        $index = 0;
+        foreach ($fields as $key => $field) {
             $type = $field['type'];
-            $value = 'TEXT';
+            $value = $key . ++$index;
             if ($type == 'integer' || $type == 'float')
                 $value = 1;
             else if ($type == 'boolean')
@@ -78,9 +78,10 @@ class FeaturesGenerator extends BaseGenerator
         $fields = $this->getFieldsWithType($metadata);
         $values = array();
 
-        foreach ($fields as $field) {
+        $index = 0;
+        foreach ($fields as $key => $field) {
             $type = $field['type'];
-            $value = 'OTHER_TEXT';
+            $value = $key . ++$index;
             if ($type == 'integer' || $type == 'float')
                 $value = 2;
             else if ($type == 'boolean')

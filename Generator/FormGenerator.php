@@ -7,42 +7,28 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class FormGenerator extends BaseGenerator
 {
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false)
     {
         if (count($metadata->identifier) > 1) {
             throw new \RuntimeException('The form generator does not support entity classes with multiple primary keys.');
         }
 
-        $parts = explode('\\', $entity);
-        $entityClass = array_pop($parts);
+        $className = $entity . 'Form';
+        $classPath = $bundle->getPath() . '/Form/' . $className . '.php';
 
-        $className = $entityClass . 'Form';
-        $dirPath = $bundle->getPath() . '/Form';
-        $classPath = $dirPath . '/' . str_replace('\\', '/', $entity) . 'Form.php';
-        $baseClassPath = $dirPath . '/Base/Base' . str_replace('\\', '/', $entity) . 'Form.php';
-
-        $parts = explode('\\', $entity);
-        array_pop($parts);
-
-        $entityNamespace = implode('\\', $parts);
-        $namespace = $bundle->getNamespace();
-
-        $this->renderFile('DisideGeneratorBundle:Form:BaseFormType.php.twig', $baseClassPath, array(
-            'fields' => $this->getFieldsWithType($metadata),
-            'namespace' => $namespace,
-            'entity_namespace' => $entityNamespace,
-            'entity_class' => $entityClass,
-            'form_class' => $className,
-            'form_type_name' => $this->getEntityRoutePrefix($entityClass)
-        ));
-
-        if (!$this->filesystem->exists($classPath)){
-            $this->renderFile('DisideGeneratorBundle:Form:FormType.php.twig', $classPath, array(
-                'namespace' => $namespace,
-                'entity_namespace' => $entityNamespace,
+        if (!$this->filesystem->exists($classPath) || $force) {
+            $this->renderFile('DisideGeneratorBundle:Form:formType.php.twig', $classPath, array(
+                'fields' => $this->getFieldsWithType($metadata),
+                'namespace' => $bundle->getNamespace(),
+                'entity_class' => $entity,
                 'form_class' => $className,
+                'form_type_name' => $this->getEntityRoutePrefix($entity)
             ));
+
+            return true;
         }
+
+        return false;
     }
 
 }

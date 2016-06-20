@@ -2,14 +2,13 @@
 
 namespace Diside\GeneratorBundle\Command;
 
-
 use Diside\GeneratorBundle\Generator\ViewsGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateViewsCommand extends BaseGenerateDoctrineCommand
+class GenerateViewsCommand extends BaseGenerateCommand
 {
     /** @var bool */
     private $filters;

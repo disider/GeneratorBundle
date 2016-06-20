@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateFeaturesCommand extends BaseGenerateDoctrineCommand
+class GenerateFeaturesCommand extends BaseGenerateCommand
 {
     /** @var bool */
     private $security;
@@ -19,10 +19,12 @@ class GenerateFeaturesCommand extends BaseGenerateDoctrineCommand
     protected function configure()
     {
         $this
-            ->setName('diside:behat:features-generator')
+            ->setName('diside:generate:features')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
             ->addOption(self::PARAMETERS_ADD_SECURITY, null, InputOption::VALUE_NONE,  'Add security annotation')
-            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add filters');
+            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add filters')
+            ->addOption(self::PARAMETERS_FORCE, 'f', InputOption::VALUE_NONE,
+                'Cause the regeneration of the class');
     }
 
     protected function preExecute(InputInterface $input, OutputInterface $output)

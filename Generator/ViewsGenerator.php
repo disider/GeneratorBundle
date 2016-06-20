@@ -26,7 +26,7 @@ class ViewsGenerator extends BaseGenerator
         $this->filters = $filters;
     }
 
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $force = false)
     {
         $this->basePath = $bundle->getPath() . '/Resources/views/' . $entity;
         $indexPath = $this->basePath . '/index.html.twig';
@@ -34,25 +34,25 @@ class ViewsGenerator extends BaseGenerator
         $this->renderFile('DisideGeneratorBundle:View:index.html.twig.twig', $indexPath, array(
             'filters' => $this->filters,
             'fields' => $this->getFieldsWithType($metadata),
-            'route_prefix' => $this->getEntityRoutePrefix($entity),
+            'entity_prefix' => $this->getEntityRoutePrefix($entity),
             'entity' => $entity,
         ));
 
         $indexPath = $this->basePath . '/new.html.twig';
         $this->renderFile('DisideGeneratorBundle:View:new.html.twig.twig', $indexPath, array(
-            'route_prefix' => $this->getEntityRoutePrefix($entity),
+            'entity_prefix' => $this->getEntityRoutePrefix($entity),
             'entity' => $entity,
         ));
 
         $indexPath = $this->basePath . '/edit.html.twig';
         $this->renderFile('DisideGeneratorBundle:View:edit.html.twig.twig', $indexPath, array(
-            'route_prefix' => $this->getEntityRoutePrefix($entity),
+            'entity_prefix' => $this->getEntityRoutePrefix($entity),
             'entity' => $entity,
         ));
 
         return $this->render('DisideGeneratorBundle:View:strings.html.twig', array(
+            'entity_prefix' => $this->getEntityRoutePrefix($entity),
             'fields' => $this->getFieldsWithType($metadata),
-            'entity' => $entity,
         ));
     }
 

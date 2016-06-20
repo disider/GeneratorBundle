@@ -1,14 +1,62 @@
 <?php
 
-namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ namespace }}\Form;
 
 {% block use_statements %}
-use {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\Base\Base{{ form_class }};
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 {% endblock use_statements %}
 
 {% block class_definition %}
-class {{ form_class }} extends Base{{ form_class }}
+class Base{{ form_class }} extends AbstractType
 {% endblock class_definition %}
 {
+{% block class_body %}
+    {%- if fields|length > 0 %}
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+        {%- for field in fields %}
+            {%- if field.type == 'date' or field.type == 'datetime' %}
 
+            ->add('{{ field.name }}', DateType::class, array(
+                  'label' => 'fields.{{ field.name|to_underscore }}',
+                  'widget' => 'single_text',
+                  'format' => 'yyyy/MM/dd'
+            ))
+        {%- else %}
+
+            ->add('{{ field.name }}', null, array(
+                  'label' => 'fields.{{ field.name|to_underscore }}'
+            ))
+            {%- endif %}
+        {%- endfor %}
+
+            ->add('submit', SubmitType::class, array('label' => 'actions.save'));
+    }
+{% endif %}
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => '{{ namespace }}\Entity\{{ entity_class }}'
+        ));
+    }
+
+    /**
+    * @return string
+    */
+    public function getName()
+    {
+        return '{{ form_type_name }}';
+    }
+{% endblock class_body %}
 }
+

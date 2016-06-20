@@ -1,5 +1,4 @@
 {% set entity_lookup = (entity[:1]|lower ~ entity[1:])|pluralize %}
-
 {% set properties = '| ' %}
 {% set values = '| ' %}
 {%- for field in fields %}
@@ -20,21 +19,23 @@ Feature: User can edit a {{ entity_name }}
   Scenario: I can edit a {{ entity_name }}
     Given I visit "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"
     When I fill the "{{ entity_path|singularize|replace('-', '_') }}" fields with:
-{% for field in fields %}
+{%- for field in fields %}
     {% set value = field.value == 'true' ? 1 : field.value %}
     {% set value = field.value == 'false' ? 0 : value %}
 
     {{ ' | ' ~ field.name  ~ ' | '  ~ value ~ ' | ' }}
-{% endfor %}
+{%- endfor %}
+
     And I press "Save"
     Then I should be on "/{{ entity_path }}/%{{ entity_lookup }}.last.id%/edit"
     And I should see the "{{ entity_path|singularize|replace('-', '_') }}" fields:
-{% for field in fields %}
+{%- for field in fields %}
     {% set value = field.value == 'true' ? 1 : field.value %}
     {% set value = field.value == 'false' ? 0 : value %}
 
     {{ ' | ' ~ field.name  ~ ' | '  ~ value ~ ' | ' }}
-{% endfor %}
+{%- endfor %}
+
     And I should see "updated successfully"
 
   Scenario: I cannot edit an undefined {{ entity_name }}

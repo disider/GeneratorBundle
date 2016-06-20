@@ -1,22 +1,21 @@
 {% block config %}
 -> ORM:
 
-    repository-class="Diside\GeneratorBundle\Entity\Repository\DefaultRepository"
+    repository-class="AppBundle\Entity\Repository\DefaultRepository"
 
 
 -> Repository:
 
-    <parameter key="default_repository.class">Diside\GeneratorBundle\Entity\Repository\DefaultRepository</parameter>
+    <parameter key="default_repository.class">AppBundle\Entity\Repository\DefaultRepository</parameter>
 
-    <service id="{{ route_prefix|lower }}_repository" class="%default_repository.class%"
-             factory-service="doctrine.orm.default_entity_manager" factory-method="getRepository">
+    <service id="{{ route_prefix|lower }}_repository" class="%default_repository.class%">
+        <factory service="doctrine.orm.default_entity_manager" method="getRepository"/>
         <argument>{{ namespace }}:{{ entity }}</argument>
     </service>
 
-
 -> Form processor:
 
-    <parameter key="default_form_processor.class">Diside\GeneratorBundle\Form\Processor\DefaultFormProcessor</parameter>
+    <parameter key="default_form_processor.class">AppBundle\Form\Processor\DefaultFormProcessor</parameter>
 
     <service id="{{ entity|lower }}_form_processor" class="%default_form_processor.class%">
         <argument type="service" id="{{ route_prefix|lower }}_repository"/>
@@ -24,23 +23,5 @@
         <argument type="service" id="security.context"/>
         <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
     </service>
-
-{#-> Composer:#}
-    {#"knplabs/knp-paginator-bundle": "~2.4",#}
-{#{% if filters %}#}
-    {#"lexik/form-filter-bundle": "3.*@dev"#}
-{#{% endif %}#}
-
-{#-> AppKernel:#}
-    {#public function registerBundles()#}
-    {#{#}
-        {#$bundles = array(#}
-            {#...#}
-            {#new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),#}
-{#{% if filters %}#}
-            {#new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle()#}
-{#{% endif %}#}
-        {#)#}
-{#}#}
 
 {% endblock config %}

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateControllerCommand extends BaseGenerateDoctrineCommand
+class GenerateControllerCommand extends BaseGenerateCommand
 {
 
     /** @var bool */
@@ -23,8 +23,12 @@ class GenerateControllerCommand extends BaseGenerateDoctrineCommand
         $this
             ->setName('diside:generate:controller')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
-            ->addOption(self::PARAMETERS_ADD_SECURITY, null, InputOption::VALUE_NONE,  'Add security annotation')
-            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add list filters');
+            ->addOption(self::PARAMETERS_ADD_SECURITY, null, InputOption::VALUE_NONE,  
+                'Add security annotation')
+            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  
+                'Add list filters')
+            ->addOption(self::PARAMETERS_FORCE, 'f', InputOption::VALUE_NONE,
+                'Cause the regeneration of the class.');
     }
 
     protected function preExecute(InputInterface $input, OutputInterface $output)
