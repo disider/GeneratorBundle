@@ -11,14 +11,14 @@
 
     {%- for field in fields %}
 
-    {{ 'fields.' ~ field.name ~ ': ' ~ entityName }}
+    {{ 'fields:'}}
+        {{ field.name ~ ': ' ~ entityName }}
     {%- endfor %}
 
-{% endblock strings %}
+    {{ 'flash:'}}
+        {{ entity_prefix ~ ':'}}
+            {{ 'created: ' ~ entityName|capitalize ~ ' successfully created.' }}
+            {{ 'updated: ' ~ entityName|capitalize ~ ' successfully updated.' }}
+            {{ 'deleted: ' ~ entityName|capitalize ~ ' successfully deleted.' }}
 
-{#actions.filter#}
-{#actions.reset#}
-{#actions.title#}
-{#actions.new#}
-{#actions.save#}
-{#actions.save_and_close#}
+{% endblock strings %}

@@ -57,7 +57,7 @@ class FeaturesGenerator extends BaseGenerator
         $index = 0;
         foreach ($fields as $key => $field) {
             $type = $field['type'];
-            $value = $key . ++$index;
+            $value = $key . $index++;
             if ($type == 'integer' || $type == 'float')
                 $value = 1;
             else if ($type == 'boolean')
@@ -81,7 +81,7 @@ class FeaturesGenerator extends BaseGenerator
         $index = 0;
         foreach ($fields as $key => $field) {
             $type = $field['type'];
-            $value = $key . ++$index;
+            $value = 'Other ' . $key . $index++;
             if ($type == 'integer' || $type == 'float')
                 $value = 2;
             else if ($type == 'boolean')

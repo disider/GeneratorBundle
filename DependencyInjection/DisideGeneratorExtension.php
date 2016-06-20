@@ -16,8 +16,6 @@ class DisideGeneratorExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('twig.xml');
-
-        $container->setParameter('default_crud.page_size', $config['default_crud']['page_size']);
     }
 
 }

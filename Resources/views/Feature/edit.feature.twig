@@ -13,7 +13,10 @@ Feature: User can edit a {{ entity_name }}
       {{ properties }}
       {{ values }}
 {% if security %}
-    And I am logged as "user" and "secret"
+    And there is a user:
+      | email            |
+      | user@example.com |
+    And I am logged as "user@example.com"
 {% endif %}
 
   Scenario: I can edit a {{ entity_name }}
@@ -36,7 +39,7 @@ Feature: User can edit a {{ entity_name }}
     {{ ' | ' ~ field.name  ~ ' | '  ~ value ~ ' | ' }}
 {%- endfor %}
 
-    And I should see "updated successfully"
+    And I should see "successfully updated"
 
   Scenario: I cannot edit an undefined {{ entity_name }}
     When I try to visit "/{{ entity_path }}/0/edit"

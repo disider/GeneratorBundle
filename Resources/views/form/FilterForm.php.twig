@@ -1,11 +1,12 @@
 <?php
 
-namespace {{ namespace }}\Form;
+namespace {{ namespace }}\Form\Filter;
 
 use Lexik\Bundle\FormFilterBundle\Filter\Doctrine\ORMQuery;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class {{ entity }}FilterForm extends AbstractType
 {
@@ -34,6 +35,8 @@ class {{ entity }}FilterForm extends AbstractType
                 'required' => false
             ))
     {% endfor %}
+
+            ->add('filter', SubmitType::class, array('label' => 'actions.filter'));
 ;
     }
 

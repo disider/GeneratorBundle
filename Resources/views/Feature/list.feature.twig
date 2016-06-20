@@ -14,7 +14,10 @@ Feature: User can list {{ entity_name }}
 
 {% if security %}
   Background:
-    Given I am logged as "user" and "secret"
+    Given there is a user:
+      | email            |
+      | user@example.com |
+    And I am logged as "user@example.com"
 {% endif %}
 
   Scenario: I see the {{ entity_name|pluralize }} list
@@ -32,7 +35,7 @@ Feature: User can list {{ entity_name }}
     Given there are 12 {{ entity_name|pluralize }} with:
       {{ properties }}
       {{ values }}
-    When I visit "/{{ entity_path }}?page=2"
+    When I visit "/{{ entity_path }}?page=3"
     Then I should see 2 "{{ entity_path|singularize }}"
 {% if filters %}
     {%- for field in other_fields %}

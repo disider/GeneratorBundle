@@ -18,10 +18,10 @@
     <parameter key="default_form_processor.class">AppBundle\Form\Processor\DefaultFormProcessor</parameter>
 
     <service id="{{ entity|lower }}_form_processor" class="%default_form_processor.class%">
+        <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
         <argument type="service" id="{{ route_prefix|lower }}_repository"/>
         <argument type="service" id="form.factory"/>
-        <argument type="service" id="security.context"/>
-        <argument>{{ namespace }}\Form\{{ entity }}Form</argument>
+        <argument type="service" id="security.token_storage"/>
     </service>
 
 {% endblock config %}

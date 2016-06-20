@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 {% if filters %}
-use {{ namespace }}\Form\{{ entity }}FilterForm;
+use {{ namespace }}\Form\Filter\{{ entity }}FilterForm;
 {% endif %}
 {% if security %}
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -78,8 +78,8 @@ class {{ entity }}Controller extends BaseController
      */
     public function deleteAction({{ entity }} $entity)
     {
-        $this->get('{{ route_prefix|lower }}_repository')->delete($entity);
-        $this->addFlash('success', 'entity.flash.deleted');
+        $this->get('{{ route_prefix }}_repository')->delete($entity);
+        $this->addFlash('success', 'flash.{{ route_prefix }}.deleted');
 
         return $this->redirectToRoute('{{ route_prefix|pluralize }}');
     }
@@ -91,7 +91,7 @@ class {{ entity }}Controller extends BaseController
         $processor->process($request, $entity);
 
         if ($processor->isValid()) {
-            $this->addFlash('success', $processor->isNew() ? 'entity.flash.created' : 'entity.flash.updated');
+            $this->addFlash('success', $processor->isNew() ? 'flash.{{ route_prefix }}.created' : 'flash.{{ route_prefix }}.updated');
 
             if($processor->isRedirectingTo(DefaultFormProcessor::REDIRECT_TO_LIST))
                 return $this->redirectToRoute('{{ route_prefix|pluralize }}');

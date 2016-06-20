@@ -4,7 +4,10 @@ Feature: User creates a {{ entity_name }}
 
 {% if security %}
   Background:
-    Given I am logged as "user" and "secret"
+    Given there is a user:
+      | email            |
+      | user@example.com |
+    And I am logged as "user@example.com"
 {% endif %}
 
   Scenario: I create a {{ entity_name }}

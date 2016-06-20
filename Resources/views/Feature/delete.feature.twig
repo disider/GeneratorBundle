@@ -13,7 +13,10 @@ Feature: User can delete a {{ entity_name }}
       {{ properties }}
       {{ values }}
 {% if security %}
-    And I am logged as "user" and "secret"
+    And there is a user:
+        | email            |
+        | user@example.com |
+    And I am logged as "user@example.com"
 {% endif %}
 
   Scenario: I can delete a {{ entity_name }}
