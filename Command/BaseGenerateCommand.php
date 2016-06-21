@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseGenerateCommand extends GenerateDoctrineCommand
 {
-    const PARAMETERS_ADD_SECURITY = 'add-security';
-    const PARAMETERS_ADD_FILTERS = 'add-filters';
+    const PARAMETERS_NO_SECURITY = 'no-security';
+    const PARAMETERS_NO_FILTERS = 'no-filters';
     const PARAMETERS_FILTER = 'filter';
     const PARAMETERS_FORCE = 'force';
 

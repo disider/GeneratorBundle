@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GenerateViewsCommand extends BaseGenerateCommand
 {
     /** @var bool */
-    private $filters;
+    private $noFilters;
 
     /**
      * {@inheritDoc}
@@ -21,18 +21,18 @@ class GenerateViewsCommand extends BaseGenerateCommand
         $this
             ->setName('diside:generate:views')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
-            ->addOption(self::PARAMETERS_ADD_FILTERS, null, InputOption::VALUE_NONE,  'Add list filters');
+            ->addOption(self::PARAMETERS_NO_FILTERS, null, InputOption::VALUE_NONE,  'Add list filters');
     }
 
     protected function preExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->filters = $input->getOption(self::PARAMETERS_ADD_FILTERS);
+        $this->noFilters = $input->getOption(self::PARAMETERS_NO_FILTERS);
     }
 
     protected function createGenerator()
     {
         $generator = new ViewsGenerator($this->getContainer()->get('filesystem'), $this->getContainer()->get('templating'));
-        $generator->setFilters($this->filters);
+        $generator->setFilters(!$this->noFilters);
         return $generator;
     }
 

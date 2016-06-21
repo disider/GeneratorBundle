@@ -17,8 +17,8 @@ class GenerateCRUDCommand extends DoctrineCommand
         $this
             ->setName('diside:generate:crud')
             ->addArgument('entity', InputArgument::REQUIRED, 'A entity name')
-            ->addOption('add-security', null, InputOption::VALUE_NONE,  'Add security annotation')
-            ->addOption('add-filters', null, InputOption::VALUE_NONE,  'Add filters to list action')
+            ->addOption('no-security', null, InputOption::VALUE_NONE,  'No security')
+            ->addOption('no-filters', null, InputOption::VALUE_NONE,  'No filters')
             ->addOption('force', 'f', InputOption::VALUE_NONE,
                 'Cause the regeneration classes');
         ;
@@ -27,8 +27,9 @@ class GenerateCRUDCommand extends DoctrineCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityName = $input->getArgument('entity');
-        $addSecurity = $input->getOption('add-security');
-        $addFilters = $input->getOption('add-filters');
+        $noSecurity = $input->getOption('no-security');
+        $noFilters = $input->getOption('no-filters');
+
         $force = $input->getOption('force');
 
         $this->executeCommand(
@@ -39,16 +40,18 @@ class GenerateCRUDCommand extends DoctrineCommand
             sprintf('app/console diside:generate:form %s' . ($force ? ' --force' : ''), $entityName),
             $output);
 
+        if(is_null($noFilters)) {
+            $this->executeCommand(
+                sprintf('app/console diside:generate:form %s' . ($force ? ' --force' : '') . ' --filter', $entityName),
+                $output);
+        }
+        
         $this->executeCommand(
-            sprintf('app/console diside:generate:form %s' . ($force ? ' --force' : '') . ($addFilters ? ' --filter' : ''), $entityName),
+            sprintf('app/console diside:generate:controller %s' . ($force ? ' --force' : '') . ($noSecurity ? ' --no-security' : '') . ($noFilters ? ' --no-filters' : ''), $entityName),
             $output);
 
         $this->executeCommand(
-            sprintf('app/console diside:generate:controller %s' . ($force ? ' --force' : '') . ($addSecurity ? ' --add-security' : '') . ($addFilters ? ' --add-filters' : ''), $entityName),
-            $output);
-
-        $this->executeCommand(
-            sprintf('app/console diside:generate:views %s' . ($addFilters ? ' --add-filters' : ''), $entityName) ,
+            sprintf('app/console diside:generate:views %s' . ($noFilters ? ' --no-filters' : ''), $entityName) ,
             $output);
     }
 

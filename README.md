@@ -1,26 +1,70 @@
 # GeneratorBundle
 
-## Create related entity files
-  1. ~~Extract common structs and components~~
-  -  From an input *entity.orm.xml*:
-    1. ~~generate Entity.php~~
-    -  ~~generate EntityForm.php~~
-    -  ~~generate EntityController.php~~
-    -  ~~generate templates twig (new, edit, index, etc)~~
-    -  ~~generate features~~
-    -  ~~generate feature contexts~~
-    -  ~~generate fixtures~~
-    -  add entity form processor to services
-    -  add entity repository to services
-    -  add entity actions in menu
-    -  add entity translations
-    -  add configuration parameters in DependencyInjection (like page_size, etc)
+## Commands
 
-## Inital symfony setup
-  1. create error pages
-  -  add default controller with homepage
-  -  vagrant files
-  -  deploy files
-  -  add FOSUserBundle
-  -  add MenuBuilder
+###Generate Behat Features 
+<code>
+app/console diside:generate:features AppBundle:EntityName
+</code>
 
+Options:
+
+  - --force (-f)
+  - --no-security
+  - --no-filters
+
+###Generate CRUD
+<code>
+app/console diside:generate:crud AppBundle:EntityName
+</code>
+
+Options:
+
+  - --force (-f)
+  - --no-security
+  - --no-filters
+
+###Generate Entity class 
+<code>
+app/console doctrine:generate:entities AppBundle:EntityName --path=src/ --no-backup
+</code>
+
+###Generate Form class 
+<code>
+app/console diside:generate:form AppBundle:EntityName
+</code>
+
+Options:
+
+  - --force (-f)
+  
+###Generate FilterForm class 
+<code>
+app/console diside:generate:form AppBundle:EntityName --filter
+</code>
+
+Options:
+
+  - --force (-f)
+
+###Generate Controller class 
+<code>
+app/console diside:generate:controller AppBundle:EntityName
+</code>
+
+Options:
+
+  - --force (-f)
+  - --no-security
+  - --no-filters
+
+###Generate Views 
+<code>
+app/console diside:generate:views AppBundle:EntityName
+</code>
+
+Options:
+
+  - --force (-f)
+  - --no-security
+  - --no-filters
